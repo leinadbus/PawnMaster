@@ -6,22 +6,8 @@ using System.Threading.Tasks;
 
 namespace PawnMaster.Model
 {
-    public class Coordenadas
+    public class Coordenadas : IEquatable<Coordenadas>
     {
-        // Qué es una coordenada?
-        // Daniel: Un contrato que estipula las normas a seguir para encontrar una ubicación
-        // Sergio: x, y
-        // Diego: Es la notación de una posición en el espacio identificada por la posición en dos ejes (en este caso, dos dimensiones).
-
-        // Un ejemplo de coordenada: 12,56
-        // En ajedrez B4
-
-        // Qué propiedades tiene? Cómo se define?
-        // Dos posiciones, una por eje. La vertical y la horizontal
-
-        // Tiene normas?
-
-
         public int PosicionVertical { get; set; }
         public int PosicionHorizontal { get; set; }
 
@@ -29,6 +15,18 @@ namespace PawnMaster.Model
         {
             this.PosicionVertical = vertical;
             this.PosicionHorizontal = horizontal;
+        }
+
+        public bool Equals(Coordenadas? obj)
+        {
+            return obj != null &&
+                   PosicionVertical == obj.PosicionVertical &&
+                   PosicionHorizontal == obj.PosicionHorizontal;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(PosicionVertical, PosicionHorizontal);
         }
     }
 }
