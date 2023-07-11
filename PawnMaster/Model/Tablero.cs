@@ -10,50 +10,52 @@ namespace PawnMaster.Model
     public class Tablero
     {
         public string Estado { get; set; }
-        public Dictionary<Coordenadas,Casilla> TableroJuego { get; set; }
+        public Dictionary<Coordenada,Casilla> TableroJuego { get; set; }
         public Tablero()
         {
             Estado = "En curso";
+            TableroJuego = CrearNuevoTablero();
         }
 
-        public void CrearNuevoTablero()
+        private Dictionary<Coordenada, Casilla> CrearNuevoTablero()
         {
             //var tablero = new List<Casilla>();
-            var tablero = new Dictionary<Coordenadas, Casilla>();
+            var tablero = new Dictionary<Coordenada, Casilla>();
 
-            for (int fila = 0; fila < 8; fila++)
+            for (int fila = 8; fila >= 1; fila--)
             {
-                for (int columna = 0; columna < 8; columna++)
+                for (char columna = 'A'; columna < 73; columna++)
                 {
                     if (columna % 2 == 0 && fila % 2 == 0)
                     {
-                        var ejemplo = new Coordenadas(fila, columna);
+                        var ejemplo = new Coordenada(columna,fila);
                         tablero.Add(ejemplo, new Casilla(ejemplo, Color.Blanco));
                     }
                     else if(columna % 2 == 0 && fila % 2 != 0)
                     {
-                        var ejemplo = new Coordenadas(fila, columna);
+                        var ejemplo = new Coordenada(columna, fila);
                         tablero.Add(ejemplo, new Casilla(ejemplo, Color.Negro));
                     }
                     else if (columna % 2 != 0 && fila % 2 != 0)
                     {
-                        var ejemplo = new Coordenadas(fila, columna);
+                        var ejemplo = new Coordenada(columna, fila);
                         tablero.Add(ejemplo, new Casilla(ejemplo, Color.Blanco));
                     }
                     else if (columna % 2 != 0 && fila % 2 == 0)
                     {
-                        var ejemplo = new Coordenadas(fila, columna);
+                        var ejemplo = new Coordenada(columna, fila);
                         tablero.Add(ejemplo, new Casilla(ejemplo, Color.Negro));
                     }
                 }
             }
-           this.TableroJuego = tablero;
-            //return tablero;
+          
+            return tablero;
         }
+
 
         public void MostrarTableroEnColorDeCasillas()
         {
-            foreach (KeyValuePair<Coordenadas, Casilla> par in this.TableroJuego)
+            foreach (KeyValuePair<Coordenada, Casilla> par in this.TableroJuego)
             {
                 Console.Write(par.Value.Color  +" | ");
                 if(par.Value.Coordenadas.PosicionHorizontal == 7)
@@ -68,10 +70,10 @@ namespace PawnMaster.Model
 
         public void MostrarTableroEnCoordenadas()
         {
-            foreach (KeyValuePair<Coordenadas, Casilla> par in this.TableroJuego)
+            foreach (KeyValuePair<Coordenada, Casilla> par in this.TableroJuego)
             {
                 Console.Write(par.Value.Coordenadas.PosicionHorizontal + " " + par.Value.Coordenadas.PosicionVertical + " | ");
-                if (par.Value.Coordenadas.PosicionHorizontal == 7)
+                if (par.Value.Coordenadas.PosicionHorizontal == 72)
                 {
                     Console.WriteLine();
                     Console.WriteLine("---- ----- ----- ----- ----- ----- ----- -----");
@@ -82,10 +84,10 @@ namespace PawnMaster.Model
 
         public void MostrarTableroEnKeys()
         {
-            foreach (KeyValuePair<Coordenadas, Casilla> par in this.TableroJuego)
+            foreach (KeyValuePair<Coordenada, Casilla> par in this.TableroJuego)
             {
                 Console.Write(par.Key.PosicionHorizontal + " " + par.Value.Coordenadas.PosicionVertical + " | ");
-                if (par.Value.Coordenadas.PosicionHorizontal == 7)
+                if (par.Value.Coordenadas.PosicionHorizontal == 72)
                 {
                     Console.WriteLine();
                     Console.WriteLine("---- ----- ----- ----- ----- ----- ----- -----");
@@ -107,7 +109,7 @@ namespace PawnMaster.Model
             Console.WriteLine("-- --- --- --- --- --- --- ---");
 
             int numeroFila = 8;
-            foreach (KeyValuePair<Coordenadas, Casilla> par in this.TableroJuego)
+            foreach (KeyValuePair<Coordenada, Casilla> par in this.TableroJuego)
             {
                 if (par.Value.FichaActual == null)
                 {
@@ -118,7 +120,7 @@ namespace PawnMaster.Model
                     Console.Write(par.Value.FichaActual.Simbolo + " | ");
                 }
 
-                if (par.Value.Coordenadas.PosicionHorizontal == 7)
+                if (par.Value.Coordenadas.PosicionHorizontal == 72)
                 {
                     Console.Write(" " + numeroFila--);
                     Console.WriteLine();
@@ -129,17 +131,23 @@ namespace PawnMaster.Model
             }
         }
 
-        public void AñadirFichaAlTablero(int Horizontal, int vertical, Ficha ficha)
-        {
-            var Coordenadas = new Coordenadas(vertical, Horizontal);
+        //public Casilla SeleccionarCasilla(int Horizontal, int vertical)
+        //{
+        //    var Coordenadas = new Coordenada(vertical, Horizontal);
 
-            if (this.TableroJuego.TryGetValue(Coordenadas, out var casilla))
+        //    return this.TableroJuego.GetValueOrDefault(Coordenadas);
+            
+        //}
+
+        public void AñadirFichaAlTablero(Coordenada coordenada, Ficha ficha)
+        {
+            if (this.TableroJuego.TryGetValue(coordenada, out var casilla))
             {
                 casilla.SetFichaActual(ficha);
             }
             else
             {
-                Console.WriteLine("Cagaste");
+                Console.WriteLine("Problemas en la función añadirFichaAlTablero()");
             }
         }
 
