@@ -8,5 +8,11 @@ namespace PawnMaster.Model
 {
     public class Jugador
     {
+        public string Nombre { get; set; }
+
+        public Jugador()
+        {
+            this.Nombre = "pepe";
+        }
     }
 }
