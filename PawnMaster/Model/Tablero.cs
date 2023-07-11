@@ -102,42 +102,64 @@ namespace PawnMaster.Model
             var arrayLetras = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
             foreach (var letra in arrayLetras)
             {
-                Console.Write(letra + "   ");
+                Console.Write("  " + letra + " ");
             }
 
             Console.WriteLine();
-            Console.WriteLine("-- --- --- --- --- --- --- ---");
+            Console.WriteLine(" --- --- --- --- --- --- --- ---");
+            Console.Write("| ");
 
             int numeroFila = 8;
             foreach (KeyValuePair<Coordenada, Casilla> par in this.TableroJuego)
             {
                 if (par.Value.FichaActual == null)
                 {
+                    Console.ForegroundColor = ConsoleColor.White;
                     Console.Write("  | ");
                 }
                 else
                 {
-                    Console.Write(par.Value.FichaActual.Simbolo + " | ");
+                    if(par.Value.FichaActual.Color == Color.Blanco)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.Write(par.Value.FichaActual.Simbolo );
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.Write( " | ");
+                    }
+                    else if (par.Value.FichaActual.Color == Color.Negro)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.Write(par.Value.FichaActual.Simbolo);
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.Write(" | ");
+                    }
+                    //Console.Write(par.Value.FichaActual.Simbolo + " | ");
                 }
 
                 if (par.Value.Coordenadas.PosicionHorizontal == 72)
                 {
+                    Console.ForegroundColor = ConsoleColor.White;
                     Console.Write(" " + numeroFila--);
                     Console.WriteLine();
-                    Console.WriteLine("-- --- --- --- --- --- --- ---");
-
+                    Console.WriteLine(" --- --- --- --- --- --- --- ---" );
+                    if (par.Value.Coordenadas.PosicionVertical >= 2)
+                    {
+                        Console.Write("| ");
+                    }
+                    
 
                 }
             }
+            Console.WriteLine();
         }
 
-        //public Casilla SeleccionarCasilla(int Horizontal, int vertical)
-        //{
-        //    var Coordenadas = new Coordenada(vertical, Horizontal);
+        public Casilla SeleccionarCasilla(char vertical,int Horizontal )
+        {
+            var Coordenadas = new Coordenada(vertical, Horizontal);
 
-        //    return this.TableroJuego.GetValueOrDefault(Coordenadas);
-            
-        //}
+            return this.TableroJuego.GetValueOrDefault(Coordenadas);
+
+        }
 
         public void AñadirFichaAlTablero(Coordenada coordenada, Ficha ficha)
         {
