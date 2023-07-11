@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,8 +10,13 @@ namespace PawnMaster.Model
 {
     public class Tablero
     {
+        private const int PrimeraLinea = 1;
+        private const char PrimeraColumna = 'A';
+        private const int UltimaLinea = 8;
+        private const char UltimaColumna = 'H';
+
         public string Estado { get; set; }
-        public Dictionary<Coordenada,Casilla> TableroJuego { get; set; }
+        public Dictionary<Coordenada, Casilla> TableroJuego { get; set; }
         public Tablero()
         {
             Estado = "En curso";
@@ -19,19 +25,18 @@ namespace PawnMaster.Model
 
         private Dictionary<Coordenada, Casilla> CrearNuevoTablero()
         {
-            //var tablero = new List<Casilla>();
             var tablero = new Dictionary<Coordenada, Casilla>();
 
-            for (int fila = 8; fila >= 1; fila--)
+            for (int fila = UltimaLinea; fila >= PrimeraLinea; fila--)
             {
-                for (char columna = 'A'; columna < 73; columna++)
+                for (char columna = PrimeraColumna; columna <= UltimaColumna; columna++)
                 {
                     if (columna % 2 == 0 && fila % 2 == 0)
                     {
-                        var ejemplo = new Coordenada(columna,fila);
+                        var ejemplo = new Coordenada(columna, fila);
                         tablero.Add(ejemplo, new Casilla(ejemplo, Color.Blanco));
                     }
-                    else if(columna % 2 == 0 && fila % 2 != 0)
+                    else if (columna % 2 == 0 && fila % 2 != 0)
                     {
                         var ejemplo = new Coordenada(columna, fila);
                         tablero.Add(ejemplo, new Casilla(ejemplo, Color.Negro));
@@ -48,112 +53,73 @@ namespace PawnMaster.Model
                     }
                 }
             }
-          
+
             return tablero;
-        }
-
-
-        public void MostrarTableroEnColorDeCasillas()
-        {
-            foreach (KeyValuePair<Coordenada, Casilla> par in this.TableroJuego)
-            {
-                Console.Write(par.Value.Color  +" | ");
-                if(par.Value.Coordenadas.PosicionHorizontal == 7)
-                {
-                    Console.WriteLine();
-                    Console.WriteLine("-- --- --- --- --- --- --- ---");
-
-                }
-            }
-            
-        }
-
-        public void MostrarTableroEnCoordenadas()
-        {
-            foreach (KeyValuePair<Coordenada, Casilla> par in this.TableroJuego)
-            {
-                Console.Write(par.Value.Coordenadas.PosicionHorizontal + " " + par.Value.Coordenadas.PosicionVertical + " | ");
-                if (par.Value.Coordenadas.PosicionHorizontal == 72)
-                {
-                    Console.WriteLine();
-                    Console.WriteLine("---- ----- ----- ----- ----- ----- ----- -----");
-
-                }
-            }
-        }
-
-        public void MostrarTableroEnKeys()
-        {
-            foreach (KeyValuePair<Coordenada, Casilla> par in this.TableroJuego)
-            {
-                Console.Write(par.Key.PosicionHorizontal + " " + par.Value.Coordenadas.PosicionVertical + " | ");
-                if (par.Value.Coordenadas.PosicionHorizontal == 72)
-                {
-                    Console.WriteLine();
-                    Console.WriteLine("---- ----- ----- ----- ----- ----- ----- -----");
-
-                }
-            }
         }
 
         public void MostrarEstadoDelTablero()
         {
+            var charList = new List<char>();
+            var totalColumnas = (UltimaColumna - PrimeraColumna) + 1;
+            // Número de digitos que tiene el total de columnas. P.e. para 140 serían 3 digitos.
+            var numeroDigitos = Convert.ToString(totalColumnas, CultureInfo.InvariantCulture).Length;
+            // Con el número de digitos puedo hacer el padding necesario para rellenar lo que falta
+            var paddingInicial = string.Concat(Enumerable.Repeat(" ", numeroDigitos));
 
-            var arrayLetras = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
-            foreach (var letra in arrayLetras)
+            for (var letra = PrimeraColumna; letra <= UltimaColumna; letra++)
             {
-                Console.Write("  " + letra + " ");
+                charList.Add(letra);
             }
 
-            Console.WriteLine();
-            Console.WriteLine(" --- --- --- --- --- --- --- ---");
-            Console.Write("| ");
+            // Pintar letras de arriba
+            var columnLegend = paddingInicial + "   " + string.Join("   ", charList);
+            var separadorInicial = paddingInicial + " " + string.Concat(Enumerable.Repeat(" ---", totalColumnas));
 
-            int numeroFila = 8;
-            foreach (KeyValuePair<Coordenada, Casilla> par in this.TableroJuego)
+            Console.WriteLine(columnLegend);
+            Console.WriteLine(separadorInicial);
+
+            for (int horizontal = UltimaLinea; horizontal >= PrimeraLinea; horizontal--)
             {
-                if (par.Value.FichaActual == null)
+                // Cuanto más ancho es el número a pintar, menos padding hay que meter
+                var digitos = Convert.ToString(horizontal, CultureInfo.InvariantCulture).Length;
+                var padding = string.Concat(Enumerable.Repeat(" ", numeroDigitos - digitos));
+                // Pintar el número de fila junto al padding
+                Console.Write(padding + horizontal);
+
+                for (char vertical = PrimeraColumna; vertical <= UltimaColumna; vertical++)
                 {
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.Write("  | ");
-                }
-                else
-                {
-                    if(par.Value.FichaActual.Color == Color.Blanco)
+                    var corrd = new Coordenada(vertical, horizontal);
+                    if (TableroJuego.TryGetValue(corrd, out var casilla))
                     {
-                        Console.ForegroundColor = ConsoleColor.Cyan;
-                        Console.Write(par.Value.FichaActual.Simbolo );
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.Write( " | ");
-                    }
-                    else if (par.Value.FichaActual.Color == Color.Negro)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Magenta;
-                        Console.Write(par.Value.FichaActual.Simbolo);
-                        Console.ForegroundColor = ConsoleColor.White;
+                        // Pintar la casilla
                         Console.Write(" | ");
-                    }
-                    //Console.Write(par.Value.FichaActual.Simbolo + " | ");
-                }
 
-                if (par.Value.Coordenadas.PosicionHorizontal == 72)
-                {
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.Write(" " + numeroFila--);
-                    Console.WriteLine();
-                    Console.WriteLine(" --- --- --- --- --- --- --- ---" );
-                    if (par.Value.Coordenadas.PosicionVertical >= 2)
-                    {
-                        Console.Write("| ");
+                        if (casilla.FichaActual != null)
+                        {
+                            Console.ForegroundColor = casilla.FichaActual.Color == Color.Blanco ? ConsoleColor.Cyan : ConsoleColor.Magenta;
+                            Console.Write(casilla.FichaActual.Simbolo);
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                        else
+                        {
+                            Console.Write(" ");
+                        }
                     }
-                    
-
                 }
+                // Pintar el final de la fila junto al número de fila y el separador entre filas
+                var separador = paddingInicial + " " + string.Concat(Enumerable.Repeat(" ---", totalColumnas));
+                Console.Write(" | " + horizontal);
+                Console.WriteLine();
+                Console.WriteLine(separador);
             }
+
+            // Pintar letras de abajo
+            Console.WriteLine(columnLegend);
+
             Console.WriteLine();
         }
 
-        public Casilla SeleccionarCasilla(char vertical,int Horizontal )
+        public Casilla SeleccionarCasilla(char vertical, int Horizontal)
         {
             var Coordenadas = new Coordenada(vertical, Horizontal);
 
@@ -172,43 +138,6 @@ namespace PawnMaster.Model
                 Console.WriteLine("Problemas en la función añadirFichaAlTablero()");
             }
         }
-
-        ////This functions translate the movements into usefull notation
-        //public int[] TraductorMovimiento(char columna, int fila)
-        //{
-        //    columna = char.ToUpper(columna);
-        //    int columnaFinal = 0;
-        //    switch (columna)
-        //    {
-        //        case 'A':
-        //            columnaFinal = 1;
-        //            break;
-        //        case 'B':
-        //            columnaFinal = 2;
-        //            break;
-        //        case 'C':
-        //            columnaFinal = 3;
-        //            break;
-        //        case 'D':
-        //            columnaFinal = 4;
-        //            break;
-        //        case 'E':
-        //            columnaFinal = 5;
-        //            break;
-        //        case 'F':
-        //            columnaFinal = 6;
-        //            break;
-        //        case 'G':
-        //            columnaFinal = 7;
-        //            break;
-        //        case 'H':
-        //            columnaFinal = 8;
-        //            break;
-        //    }
-        //    int[] movimientoTraducido = { fila, columnaFinal };
-        //    return movimientoTraducido;
-        //}
-
 
     }
 }
