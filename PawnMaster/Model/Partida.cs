@@ -7,11 +7,11 @@ using PawnMaster.Model;
 
 namespace PawnMaster.Model
 {
-    public class Partida 
+    public class Partida
     {
-        public Guid identificador { get; set; }
+        public Guid Identificador { get; set; }
 
-        public DateTime date { get; set; }
+        public DateTime Date { get; set; }
 
         public Tablero Tablero { get; set; }
 
@@ -23,16 +23,17 @@ namespace PawnMaster.Model
 
         public Partida(Jugador jugadorBlanco, Jugador jugadorNegro)
         {
-            identificador = Guid.NewGuid();
-            date = DateTime.Now;
+            Identificador = Guid.NewGuid();
+            Date = DateTime.Now;
             JugadorBlanco = jugadorBlanco;
             JugadorNegro = jugadorNegro;
-            Tablero = new Tablero();  
+            Tablero = new Tablero();
+            ListaDeMovimientos = new List<string>();
         }
 
         public void CrearPartidaDeAjedrez ()
         {
-           
+
             //Fichas Negras
             var PeonNegro0 = new Peon(Color.Negro);
             var PeonNegro1 = new Peon(Color.Negro);
@@ -117,6 +118,31 @@ namespace PawnMaster.Model
             this.Tablero.AñadirFichaAlTablero(new Coordenada('G', 2), PeonBlanco6);
             this.Tablero.AñadirFichaAlTablero(new Coordenada('H', 2), PeonBlanco7);
 
+        }
+
+        public bool existeFichaEnCasillaDestino (Casilla casillaDestino)
+        {
+            if(casillaDestino.FichaActual == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+
+        }
+
+        public bool FichaEnCasillaDestinoEsDelMismoColor (Ficha fichaActual, Ficha fichaDestino)
+        {
+            if(fichaActual.Color == fichaDestino.Color)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
