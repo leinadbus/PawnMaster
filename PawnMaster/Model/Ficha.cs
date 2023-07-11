@@ -7,25 +7,39 @@ using PawnMaster;
 
 namespace PawnMaster.Model
 {
-    public class Ficha
+    public abstract class Ficha
     {
-        public Color color { get; }
+        public Color Color { get; }
 
-        public  char simbolo { get; set; }
+        public  char Simbolo { get; set; }
 
-        public int numeroMovimientos { get; set; } = 0;
-
-        //public int[] posicionInicial { get; set; }
-        public int[] posicionActual { get; set; }
+        public int NumeroMovimientos { get; set; } = 0;
 
         public Ficha(Color color)
         {
-            this.color = color;
+            this.Simbolo = ' ';
+            this.Color = color;
         }
 
-        public void aumentarNumeroMovimientos()
+        public void AumentarNumeroMovimientos()
         {
-            numeroMovimientos++;
+            NumeroMovimientos++;
         }
+
+        public static bool SaberSiElMovimientoEsPositivo(int numero)
+        {
+            if (numero >= 0)
+            {
+                return true; // El número es positivo o cero
+            }
+            else
+            {
+                return false; // El número es negativo
+            }
+        }
+
+        public abstract bool ValidarDireccion(Casilla inicio, Casilla Final);
+
+        public abstract bool ValidarPosicion(Casilla inicio, Casilla Final);
     }
 }
