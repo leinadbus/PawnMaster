@@ -35,41 +35,30 @@ namespace PawnMaster.Model
             {
                 if (Color == Color.Blanco)
                 {
-
                     if (NumeroMovimientos == 0 && DiferenciaPosicionesFilas == 2 && DiferenciaPosicionesColumnas == 0)
                     {
                         sePodriaMover = true;
                     }
-                    else if (NumeroMovimientos == 0 && DiferenciaPosicionesFilas == 1 && (DiferenciaPosicionesColumnas == 0 || DiferenciaPosicionesColumnas == 1 || DiferenciaPosicionesColumnas == -1))
-                    {
-                        sePodriaMover = true;
-                    }
-                    else if (NumeroMovimientos != 0 && DiferenciaPosicionesFilas == 1 && (DiferenciaPosicionesColumnas == 0 || DiferenciaPosicionesColumnas == 1 || DiferenciaPosicionesColumnas == -1))
+                    else if (NumeroMovimientos == 0 && DiferenciaPosicionesFilas == 1 && DiferenciaPosicionesColumnas == 0 )
                     {
                         sePodriaMover = true;
                     }
                 }
                 else
                 {
-
                     if (NumeroMovimientos == 0 && DiferenciaPosicionesFilas == -2 && DiferenciaPosicionesColumnas == 0)
                     {
                         sePodriaMover = true;
                     }
-                    else if (NumeroMovimientos == 0 && DiferenciaPosicionesFilas == -1 && (DiferenciaPosicionesColumnas == 0 || DiferenciaPosicionesColumnas == 1 || DiferenciaPosicionesColumnas == -1))
+                    else if (NumeroMovimientos == 0 && DiferenciaPosicionesFilas == -1 && DiferenciaPosicionesColumnas == 0)
                     {
                         sePodriaMover = true;
                     }
-                    else if (NumeroMovimientos != 0 && DiferenciaPosicionesFilas == -1 && (DiferenciaPosicionesColumnas == 0 || DiferenciaPosicionesColumnas == 1 || DiferenciaPosicionesColumnas == -1))
-                    {
-                        sePodriaMover = true;
-                    }
-
                 }
             }
             return sePodriaMover;
         }
-    
+
 
         public override bool ValidarDireccion(Casilla casillaEnLaQueEstoy, Casilla casillaALaQuePretendoMoverme)
         {
@@ -86,7 +75,7 @@ namespace PawnMaster.Model
 
             if (Color == Color.Blanco && SaberSiElMovimientoEsPositivo(DiferenciaPosicionesFilas))
             {
-                    sePodriaMover = true;   
+                    sePodriaMover = true;
             }
             else if (Color == Color.Negro && !SaberSiElMovimientoEsPositivo(DiferenciaPosicionesFilas))
             {
