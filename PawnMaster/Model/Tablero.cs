@@ -9,14 +9,14 @@ namespace PawnMaster.Model
 {
     public class Tablero
     {
-        public string estado { get; set; }
-
+        public string Estado { get; set; }
+        public Dictionary<Coordenadas,Casilla> TableroJuego { get; set; }
         public Tablero()
         {
-            estado = "En curso";
+            Estado = "En curso";
         }
 
-        public Dictionary<Coordenadas, Casilla> CrearNuevoTablero ()
+        public void CrearNuevoTablero()
         {
             //var tablero = new List<Casilla>();
             var tablero = new Dictionary<Coordenadas, Casilla>();
@@ -47,13 +47,13 @@ namespace PawnMaster.Model
                     }
                 }
             }
-           
-            return tablero;
+           this.TableroJuego = tablero;
+            //return tablero;
         }
 
-        public static void MostrarTableroEnColorDeCasillas(Dictionary<Coordenadas, Casilla> tablero)
+        public void MostrarTableroEnColorDeCasillas()
         {
-            foreach (KeyValuePair<Coordenadas, Casilla> par in tablero)
+            foreach (KeyValuePair<Coordenadas, Casilla> par in this.TableroJuego)
             {
                 Console.Write(par.Value.Color  +" | ");
                 if(par.Value.Coordenadas.PosicionHorizontal == 7)
@@ -66,9 +66,9 @@ namespace PawnMaster.Model
             
         }
 
-        public static void MostrarTableroEnCoordenadas(Dictionary<Coordenadas, Casilla> tablero)
+        public void MostrarTableroEnCoordenadas()
         {
-            foreach (KeyValuePair<Coordenadas, Casilla> par in tablero)
+            foreach (KeyValuePair<Coordenadas, Casilla> par in this.TableroJuego)
             {
                 Console.Write(par.Value.Coordenadas.PosicionHorizontal + " " + par.Value.Coordenadas.PosicionVertical + " | ");
                 if (par.Value.Coordenadas.PosicionHorizontal == 7)
@@ -80,9 +80,9 @@ namespace PawnMaster.Model
             }
         }
 
-        public static void MostrarTableroEnKeys(Dictionary<Coordenadas, Casilla> tablero)
+        public void MostrarTableroEnKeys()
         {
-            foreach (KeyValuePair<Coordenadas, Casilla> par in tablero)
+            foreach (KeyValuePair<Coordenadas, Casilla> par in this.TableroJuego)
             {
                 Console.Write(par.Key.PosicionHorizontal + " " + par.Value.Coordenadas.PosicionVertical + " | ");
                 if (par.Value.Coordenadas.PosicionHorizontal == 7)
@@ -94,7 +94,7 @@ namespace PawnMaster.Model
             }
         }
 
-        public void MostrarEstadoDelTablero(Dictionary<Coordenadas, Casilla> tablero)
+        public void MostrarEstadoDelTablero()
         {
 
             var arrayLetras = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
@@ -107,7 +107,7 @@ namespace PawnMaster.Model
             Console.WriteLine("-- --- --- --- --- --- --- ---");
 
             int numeroFila = 8;
-            foreach (KeyValuePair<Coordenadas, Casilla> par in tablero)
+            foreach (KeyValuePair<Coordenadas, Casilla> par in this.TableroJuego)
             {
                 if (par.Value.FichaActual == null)
                 {
@@ -126,6 +126,20 @@ namespace PawnMaster.Model
 
 
                 }
+            }
+        }
+
+        public void AñadirFichaAlTablero(int Horizontal, int vertical, Ficha ficha)
+        {
+            var Coordenadas = new Coordenadas(vertical, Horizontal);
+
+            if (this.TableroJuego.TryGetValue(Coordenadas, out var casilla))
+            {
+                casilla.SetFichaActual(ficha);
+            }
+            else
+            {
+                Console.WriteLine("Cagaste");
             }
         }
 
