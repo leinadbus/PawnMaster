@@ -12,5 +12,15 @@ namespace PawnMaster.Model
         {
             Simbolo = 'B';
         }
+
+        public override bool ValidarDireccion(Casilla inicio, Casilla Final)
+        {
+            throw new NotImplementedException();
+        }
+        public override bool ValidarPosicion(Casilla casillaEnLaQueEstoy, Casilla casillaALaQuePretendoMoverme)
+        {
+            throw new NotImplementedException();
+        }
     }
+
 }
