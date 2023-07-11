@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace PawnMaster.Model
 {
-    public class Coordenadas : IEquatable<Coordenadas>
+    public class Coordenada : IEquatable<Coordenada>
     {
         public int PosicionVertical { get; set; }
-        public int PosicionHorizontal { get; set; }
+        public char PosicionHorizontal { get; set; }
 
-        public Coordenadas(int vertical, int horizontal)
+        public Coordenada(char horizontal,int vertical)
         {
             this.PosicionVertical = vertical;
             this.PosicionHorizontal = horizontal;
         }
 
-        public bool Equals(Coordenadas? obj)
+        public bool Equals(Coordenada? obj)
         {
             return obj != null &&
                    PosicionVertical == obj.PosicionVertical &&
