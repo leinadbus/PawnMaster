@@ -22,7 +22,7 @@ namespace PawnMaster.Model
         Limitan con otras casillas normalmente
          */
 
-        public Coordenadas Coordenadas { get; init; }
+        public Coordenada Coordenadas { get; init; }
         public Color Color { get; set; }
 
         // La forma no es útil en este progama
@@ -31,7 +31,7 @@ namespace PawnMaster.Model
         public Ficha? FichaActual { get; private set; } = null;
 
 
-        public Casilla(Coordenadas coordenadas, Color color)
+        public Casilla(Coordenada coordenadas, Color color)
         {
             this.Coordenadas = coordenadas;
             this.Color = color;
@@ -45,6 +45,13 @@ namespace PawnMaster.Model
         public void SetFichaActual(Ficha ficha)
         {
             this.FichaActual = ficha;
+        }
+
+        public bool Tengoficha(int posicionHorizontal, int posicionVertical)
+        {
+            bool tieneficha = false;
+            if (this.FichaActual != null && this.Coordenadas.PosicionHorizontal == posicionHorizontal && this.Coordenadas.PosicionVertical == posicionVertical){ tieneficha = true; }
+            return tieneficha;
         }
     }
 }
