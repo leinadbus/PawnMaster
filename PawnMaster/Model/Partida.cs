@@ -91,7 +91,7 @@ namespace PawnMaster.Model
 
             this.Tablero.AñadirFichaAlTablero(new Coordenada('A', 7), PeonNegro0);
             this.Tablero.AñadirFichaAlTablero(new Coordenada('B', 7), PeonNegro1);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('C', 7), PeonNegro2);
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('C', 3), PeonNegro2);
             this.Tablero.AñadirFichaAlTablero(new Coordenada('D', 7), PeonNegro3);
             this.Tablero.AñadirFichaAlTablero(new Coordenada('E', 7), PeonNegro4);
             this.Tablero.AñadirFichaAlTablero(new Coordenada('F', 7), PeonNegro5);
@@ -145,67 +145,67 @@ namespace PawnMaster.Model
             }
         }
 
-        public (char, string, string) RecogerDatosDelMovimientoDelUsuario (String movimientoUsuario)
-        {
-            char piezaAMover = ' ';
-            string nuevomovimiento = "";
-            //Está vacio??
-            if (!string.IsNullOrEmpty(movimientoUsuario))
-                {
-                //Eliminamos cualquier espacio en blanco que pueda haber
-                movimientoUsuario = movimientoUsuario.Trim();
-                movimientoUsuario = movimientoUsuario.Replace(" ", "");
+        //public (char, string, string) RecogerDatosDelMovimientoDelUsuario (String movimientoUsuario)
+        //{
+        //    char piezaAMover = ' ';
+        //    string nuevomovimiento = "";
+        //    //Está vacio??
+        //    if (!string.IsNullOrEmpty(movimientoUsuario))
+        //        {
+        //        //Eliminamos cualquier espacio en blanco que pueda haber
+        //        movimientoUsuario = movimientoUsuario.Trim();
+        //        movimientoUsuario = movimientoUsuario.Replace(" ", "");
                 
 
-                    //Empieza con una mayúscula?
-                    if (char.IsUpper(movimientoUsuario[0]))
-                    {
-                    //Le quitamos la primera posición que es mayúscula (La podemos guardar en alguna variable)
-                    piezaAMover = movimientoUsuario[0];
+        //            //Empieza con una mayúscula?
+        //            if (char.IsUpper(movimientoUsuario[0]))
+        //            {
+        //            //Le quitamos la primera posición que es mayúscula (La podemos guardar en alguna variable)
+        //            piezaAMover = movimientoUsuario[0];
                         
-                        for (int i = 1; i < movimientoUsuario.Length; i++)
-                        {
-                            nuevomovimiento += movimientoUsuario[i];
-                        }
-                    }
-                    else
-                    {
-                        nuevomovimiento = movimientoUsuario;
-                    }
+        //                for (int i = 1; i < movimientoUsuario.Length; i++)
+        //                {
+        //                    nuevomovimiento += movimientoUsuario[i];
+        //                }
+        //            }
+        //            else
+        //            {
+        //                nuevomovimiento = movimientoUsuario;
+        //            }
 
-                    //Contiene una x??
-                    if (nuevomovimiento.Contains("x"))
-                    {
-                        //El tratamiento de separación es diferente si contiene una x de no
-                        //El fín es diferente, ya que no movemos, atacamos
+        //            //Contiene una x??
+        //            if (nuevomovimiento.Contains("x"))
+        //            {
+        //                //El tratamiento de separación es diferente si contiene una x de no
+        //                //El fín es diferente, ya que no movemos, atacamos
 
-                        string[] movimientos = nuevomovimiento.Split("x");
-                        string casillaInicial = movimientos[0];
-                        string casillaFinalAComer = movimientos[1];
-                        Console.WriteLine("Pieza a mover: " + piezaAMover);
-                        Console.WriteLine("Casilla Inicial: " + casillaInicial);
-                        Console.WriteLine("Casilla a comer: " + casillaFinalAComer);
-                    return (piezaAMover, casillaInicial, casillaFinalAComer);
-                }
-                    else
-                    {
-                        //Este fín es solamente moverse, no comer
-                        int mitad = nuevomovimiento.Length / 2;
-                        string parte1 = nuevomovimiento.Substring(0, mitad);
-                        string parte2 = nuevomovimiento.Substring(mitad);
-                        Console.WriteLine("Pieza a mover: " + piezaAMover);
-                        Console.WriteLine("Casilla Inicial: " + parte1);
-                        Console.WriteLine("Casilla Destino: " + parte2);
-                    return (piezaAMover, parte1, parte2);
-                }
-                }
+        //                string[] movimientos = nuevomovimiento.Split("x");
+        //                string casillaInicial = movimientos[0];
+        //                string casillaFinalAComer = movimientos[1];
+        //                Console.WriteLine("Pieza a mover: " + piezaAMover);
+        //                Console.WriteLine("Casilla Inicial: " + casillaInicial);
+        //                Console.WriteLine("Casilla a comer: " + casillaFinalAComer);
+        //            return (piezaAMover, casillaInicial, casillaFinalAComer);
+        //        }
+        //            else
+        //            {
+        //                //Este fín es solamente moverse, no comer
+        //                int mitad = nuevomovimiento.Length / 2;
+        //                string parte1 = nuevomovimiento.Substring(0, mitad);
+        //                string parte2 = nuevomovimiento.Substring(mitad);
+        //                Console.WriteLine("Pieza a mover: " + piezaAMover);
+        //                Console.WriteLine("Casilla Inicial: " + parte1);
+        //                Console.WriteLine("Casilla Destino: " + parte2);
+        //            return (piezaAMover, parte1, parte2);
+        //        }
+        //        }
 
-                else
-                {
-                    Console.WriteLine("Por favor introduzca un movimiento adecuado");
-                }
-            return (piezaAMover, string.Empty, string.Empty);
-        }
+        //        else
+        //        {
+        //            Console.WriteLine("Por favor introduzca un movimiento adecuado");
+        //        }
+        //    return (piezaAMover, string.Empty, string.Empty);
+        //}
 
         public bool ComprobarSiEsCaptura(String movimientoUsuario)
         {
@@ -265,7 +265,51 @@ namespace PawnMaster.Model
             return (parte1, parte2);
 
         }
-        
+
+        public bool ComprobarMovimientoCapturaPeon (Casilla casillaEnLaQueEstoy, Casilla casillaALaQuePretendoMoverme)
+        {
+            bool sePodriaMover = false;
+
+            //Posicion Inicial
+            var FilaPosicionActual = casillaEnLaQueEstoy.Coordenadas.PosicionVertical;
+            var ColumnaPosicionActual = casillaEnLaQueEstoy.Coordenadas.PosicionHorizontal;
+
+            //Posicion Final
+            var FilaPosicionfinal = casillaALaQuePretendoMoverme.Coordenadas.PosicionVertical;
+            var ColumnaPosicionFinal = casillaALaQuePretendoMoverme.Coordenadas.PosicionHorizontal;
+
+            //Diferencia de filas (Dirección)
+            var DiferenciaPosicionesFilas = FilaPosicionfinal - FilaPosicionActual;
+            var DiferenciaPosicionesColumnas = ColumnaPosicionFinal - ColumnaPosicionActual;
+
+            
+
+            if (DiferenciaPosicionesFilas == 1 || DiferenciaPosicionesFilas == 2 || DiferenciaPosicionesFilas == -1 || DiferenciaPosicionesFilas == -2)  //n1 La cantidad de casillas es correcta?
+            {
+                if (casillaEnLaQueEstoy.FichaActual != null)
+                {
+
+                if (casillaEnLaQueEstoy.FichaActual.Color == Color.Blanco)
+                {
+
+                     if (DiferenciaPosicionesFilas == 1 && (DiferenciaPosicionesColumnas == 1 || DiferenciaPosicionesColumnas == -1))
+                    {
+                        sePodriaMover = true;
+                    }
+                }
+                else
+                {
+
+                    if (DiferenciaPosicionesFilas == -1 && (DiferenciaPosicionesColumnas == 1 || DiferenciaPosicionesColumnas == -1))
+                    {
+                        sePodriaMover = true;
+                    }
+                }
+                }
+            }
+            return sePodriaMover;
+        }
+
 
     }
 }
