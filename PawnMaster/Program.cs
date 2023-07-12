@@ -1,5 +1,6 @@
 ﻿using PawnMaster.Model;
 using System.Security.Cryptography.X509Certificates;
+using System.Xml;
 
 namespace PawnMaster
 {
@@ -7,87 +8,107 @@ namespace PawnMaster
     {
         static void Main(string[] args)
         {
-            var Pepe = new Jugador();            
-            var Meme = new Jugador();
-
-            var Partida = new Partida(Pepe ,Meme);
-          
-
-            Partida.CrearPartidaDeAjedrez();
-         
-
-            Partida.Tablero.MostrarEstadoDelTablero();
-
-            Console.WriteLine("Que ficha quiere mover?");
-            char filaInicio = char.Parse(Console.ReadLine());
-            int columnaInicio = int.Parse(Console.ReadLine());
-
-            var casillaInicioEjemplo = Partida.Tablero.SeleccionarCasilla(filaInicio, columnaInicio);
-            Console.WriteLine(casillaInicioEjemplo.FichaActual.Simbolo);
 
 
-            Console.WriteLine("A donde la quieres mover?");
-            char filafinal = char.Parse(Console.ReadLine());
-            int ColumnaFinal = int.Parse(Console.ReadLine());
+            string comer = "Pb2xd3";
+            string mover = "Pb2b4";
+            string comersincasilla = "xb4";
+            string comersinficha = "b2xd3";
+            string moversinficha = "b2d3";
 
 
-            var casillaFinalEjemplo = Partida.Tablero.SeleccionarCasilla(filafinal, ColumnaFinal);
+            Jugador jugador = new Jugador();
+            Jugador jugadora = new Jugador();
+            Partida partida = new(jugador, jugadora);
+            partida.CrearPartidaDeAjedrez();
+            partida.Tablero.MostrarEstadoDelTablero();
 
-            //Console.WriteLine(casillaInicioEjemplo.FichaActual.ValidarDireccion(casillaInicioEjemplo, casillaFinalEjemplo));
-            //Console.WriteLine(casillaInicioEjemplo.FichaActual.ValidarPosicion(casillaInicioEjemplo, casillaFinalEjemplo));
 
-            if(casillaInicioEjemplo.FichaActual.ValidarDireccion(casillaInicioEjemplo, casillaFinalEjemplo) && casillaInicioEjemplo.FichaActual.ValidarPosicion(casillaInicioEjemplo, casillaFinalEjemplo))
+            string movimientoUsuario;
+            do
             {
-                
-                var ficha = casillaInicioEjemplo.FichaActual;
-                ficha.AumentarNumeroMovimientos();
-               
-                casillaInicioEjemplo.EliminarFicha();
-                casillaFinalEjemplo.SetFichaActual(ficha);
+                movimientoUsuario = Console.ReadLine();
 
-                Console.WriteLine();
-                Partida.Tablero.MostrarEstadoDelTablero();
-            }
-            else
-            {
-                Console.WriteLine("No se Puede realizar ese movimiento");
-            }
+                if (partida.ComprobarSiEsCaptura(movimientoUsuario))
+                {
+                    Console.WriteLine("Esto es un movimiento de captura");
+                    //Recogemos la pieza si nos la han dado
+                    (char pieza, string movimiento) = partida.RecogerPiezaYMovimientoOCaptura(movimientoUsuario);
 
-            Console.WriteLine("Que ficha quiere mover?");
-             filaInicio = char.Parse(Console.ReadLine());
-             columnaInicio = int.Parse(Console.ReadLine());
+                    //Recogemos el caracter de captura 'x' ó 'X' (Este paso puede que desaparezca)
+                    char caracterCaptura = partida.RecogerCaracterCaptura(movimientoUsuario);
 
-             casillaInicioEjemplo = Partida.Tablero.SeleccionarCasilla(filaInicio, columnaInicio);
-            Console.WriteLine(casillaInicioEjemplo.FichaActual.Simbolo);
+                    //Recogemos los datos del movimiento por separado en dos variables
+                    (string casillaInicio, string casillaDestino) = partida.RecogerDatosDeLaCaptura(movimiento, caracterCaptura);
 
+                    //Mostramos para comprobar
+                    Console.WriteLine("La ficha es: " + pieza);
+                    Console.WriteLine("La casilla de Inicio es: " + casillaInicio);
+                    Console.WriteLine("La casilla de Destino es: " + casillaDestino);
 
-            Console.WriteLine("A donde la quieres mover?");
-             filafinal = char.Parse(Console.ReadLine());
-             ColumnaFinal = int.Parse(Console.ReadLine());
-             casillaFinalEjemplo = Partida.Tablero.SeleccionarCasilla(filafinal, ColumnaFinal);
+                    //Separamos las coordenadas de los datos (Esto podría ser un método)
+                    char verticalInicio = char.ToUpper(casillaInicio[0]);
+                    int horizontalInicio = casillaInicio[1] - '0';
 
 
-            if (casillaInicioEjemplo.FichaActual.ValidarDireccion(casillaInicioEjemplo, casillaFinalEjemplo) && casillaInicioEjemplo.FichaActual.ValidarPosicion(casillaInicioEjemplo, casillaFinalEjemplo))
-            {
-               
-                var ficha = casillaInicioEjemplo.FichaActual;
-                ficha.AumentarNumeroMovimientos();
-               
-                casillaInicioEjemplo.EliminarFicha();
-                casillaFinalEjemplo.SetFichaActual(ficha);
+                    char verticalDestino = char.ToUpper(casillaDestino[0]);
+                    int horizontalDestino = casillaDestino[1] - '0';
 
-                Console.WriteLine();
-                Partida.Tablero.MostrarEstadoDelTablero();
-            }
-            else
-            {
-                Console.WriteLine("No se Puede realizar ese movimiento");
-            }
+                    Casilla casillaInicioSeleccionada = partida.Tablero.SeleccionarCasilla(verticalInicio, horizontalInicio);
+                    Casilla casillaDestinoSeleccionada = partida.Tablero.SeleccionarCasilla(verticalDestino, horizontalDestino);
 
-            var casillaPrueba = Partida.Tablero.SeleccionarCasilla('B', 2);
-            Console.WriteLine(Partida.existeFichaEnCasillaDestino(casillaPrueba));
+                    ////Comprobamos si en la casilla destino existe una ficha enemiga ////Comprobamos si el Peón puede moverse hasta donde nos piden en una captura
+                    if (partida.existeFichaEnCasillaDestino(casillaDestinoSeleccionada) && casillaInicioSeleccionada.FichaActual.Color != casillaDestinoSeleccionada.FichaActual.Color && partida.ComprobarMovimientoCapturaPeon(casillaInicioSeleccionada, casillaDestinoSeleccionada))
+                    {
+                        Console.WriteLine("Completamos movimiento");
+                        Console.WriteLine();
+                    }
+                    else
+                    {
+                        Console.WriteLine("El movimiento no es posible");
+                    }
+
+                    //if Todos los pasos completados, procedemos a mover la ficha para captura
+
+                    Console.WriteLine();
+                    partida.Tablero.MostrarEstadoDelTablero();
+                    Console.WriteLine();
+                }
+                else
+                {
+                    Console.WriteLine("Movimiento de Desplazamiento:");
+                    (char pieza, string movimiento) = partida.RecogerPiezaYMovimientoOCaptura(movimientoUsuario);
+                    (string casillaInicio, string casillaDestino) = partida.RecogerDatosDelMovimiento(movimiento);
+                    Console.WriteLine("La ficha es: " + pieza);
+                    Console.WriteLine("La casilla de Inicio es: " + casillaInicio);
+                    Console.WriteLine("La casilla de Destino es: " + casillaDestino);
+
+                    char verticalInicio = char.ToUpper(casillaInicio[0]);
+                    int horizontalInicio = casillaInicio[1] - '0';
+
+
+                    char verticalDestino = char.ToUpper(casillaDestino[0]);
+                    int horizontalDestino = casillaDestino[1] - '0';
+
+                    Casilla casillaInicioSeleccionada = partida.Tablero.SeleccionarCasilla(verticalInicio, horizontalInicio);
+                    Casilla casillaDestinoSeleccionada = partida.Tablero.SeleccionarCasilla(verticalDestino, horizontalDestino);
+
+                    if (!partida.existeFichaEnCasillaDestino(casillaDestinoSeleccionada) && casillaInicioSeleccionada.FichaActual.ValidarDireccion(casillaInicioSeleccionada, casillaDestinoSeleccionada) && casillaInicioSeleccionada.FichaActual.ValidarPosicion(casillaInicioSeleccionada, casillaDestinoSeleccionada))
+                    {
+                        Console.WriteLine("Se puede mover");
+                    }
+                    else
+                    {
+                        Console.WriteLine("NO Se puede mover");
+                    }
+                    Console.WriteLine();
+                    partida.Tablero.MostrarEstadoDelTablero();
+                    Console.WriteLine();
+                }
+
+            } while (movimientoUsuario != "-1");
 
         }
+
     }
-    
 }
