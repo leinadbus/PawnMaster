@@ -144,5 +144,128 @@ namespace PawnMaster.Model
                 return false;
             }
         }
+
+        public (char, string, string) RecogerDatosDelMovimientoDelUsuario (String movimientoUsuario)
+        {
+            char piezaAMover = ' ';
+            string nuevomovimiento = "";
+            //Está vacio??
+            if (!string.IsNullOrEmpty(movimientoUsuario))
+                {
+                //Eliminamos cualquier espacio en blanco que pueda haber
+                movimientoUsuario = movimientoUsuario.Trim();
+                movimientoUsuario = movimientoUsuario.Replace(" ", "");
+                
+
+                    //Empieza con una mayúscula?
+                    if (char.IsUpper(movimientoUsuario[0]))
+                    {
+                    //Le quitamos la primera posición que es mayúscula (La podemos guardar en alguna variable)
+                    piezaAMover = movimientoUsuario[0];
+                        
+                        for (int i = 1; i < movimientoUsuario.Length; i++)
+                        {
+                            nuevomovimiento += movimientoUsuario[i];
+                        }
+                    }
+                    else
+                    {
+                        nuevomovimiento = movimientoUsuario;
+                    }
+
+                    //Contiene una x??
+                    if (nuevomovimiento.Contains("x"))
+                    {
+                        //El tratamiento de separación es diferente si contiene una x de no
+                        //El fín es diferente, ya que no movemos, atacamos
+
+                        string[] movimientos = nuevomovimiento.Split("x");
+                        string casillaInicial = movimientos[0];
+                        string casillaFinalAComer = movimientos[1];
+                        Console.WriteLine("Pieza a mover: " + piezaAMover);
+                        Console.WriteLine("Casilla Inicial: " + casillaInicial);
+                        Console.WriteLine("Casilla a comer: " + casillaFinalAComer);
+                    return (piezaAMover, casillaInicial, casillaFinalAComer);
+                }
+                    else
+                    {
+                        //Este fín es solamente moverse, no comer
+                        int mitad = nuevomovimiento.Length / 2;
+                        string parte1 = nuevomovimiento.Substring(0, mitad);
+                        string parte2 = nuevomovimiento.Substring(mitad);
+                        Console.WriteLine("Pieza a mover: " + piezaAMover);
+                        Console.WriteLine("Casilla Inicial: " + parte1);
+                        Console.WriteLine("Casilla Destino: " + parte2);
+                    return (piezaAMover, parte1, parte2);
+                }
+                }
+
+                else
+                {
+                    Console.WriteLine("Por favor introduzca un movimiento adecuado");
+                }
+            return (piezaAMover, string.Empty, string.Empty);
+        }
+
+        public bool ComprobarSiEsCaptura(String movimientoUsuario)
+        {
+                if (movimientoUsuario.Contains('x') || movimientoUsuario.Contains('X'))
+                {
+                    return true;
+                }
+                else return false;
+        }
+
+        public char RecogerCaracterCaptura(String movimientoUsuario)
+        {
+            if (movimientoUsuario.Contains('x') )
+            {
+                return 'x';
+            }
+            else return 'X'; 
+        }
+
+        public (char, string) RecogerPiezaYMovimientoOCaptura (String movimientoUsuario)
+        {
+            char piezaAMover = ' ';
+            string nuevomovimiento = "";
+            if (char.IsUpper(movimientoUsuario[0]))
+            {
+                //Le quitamos la primera posición que es mayúscula (La podemos guardar en alguna variable)
+                piezaAMover = movimientoUsuario[0];
+
+                for (int i = 1; i < movimientoUsuario.Length; i++)
+                {
+                    nuevomovimiento += movimientoUsuario[i];
+                }
+            }
+            else
+            {
+                nuevomovimiento = movimientoUsuario;
+            }
+            return (piezaAMover, nuevomovimiento);
+        }
+
+
+        public ( string, string) RecogerDatosDeLaCaptura(String nuevomovimiento, char caracterCaptura)
+        {
+            string[] movimientos = nuevomovimiento.Split(caracterCaptura);
+            string casillaInicial = movimientos[0];
+            string casillaFinalAComer = movimientos[1];
+
+            return (casillaInicial, casillaFinalAComer);
+        }
+
+        public (string, string) RecogerDatosDelMovimiento(String nuevomovimiento)
+        {
+            int mitad = nuevomovimiento.Length / 2;
+            string parte1 = nuevomovimiento.Substring(0, mitad);
+            string parte2 = nuevomovimiento.Substring(mitad);
+
+            return (parte1, parte2);
+
+        }
+        
+
     }
 }
