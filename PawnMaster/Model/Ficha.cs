@@ -38,8 +38,8 @@ namespace PawnMaster.Model
             }
         }
 
-        public abstract bool ValidarDireccion(Casilla inicio, Casilla Final);
+        public abstract bool ValidarMovimiento(Casilla inicio, Casilla Final);
 
-        public abstract bool ValidarPosicion(Casilla inicio, Casilla Final);
+        public abstract bool validarCaptura(Casilla inicio, Casilla Final);
     }
 }

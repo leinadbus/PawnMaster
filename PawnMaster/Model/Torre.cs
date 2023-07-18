@@ -13,11 +13,11 @@ namespace PawnMaster.Model
             Simbolo = 'R';
         }
 
-        public override bool ValidarDireccion(Casilla inicio, Casilla Final)
+        public override bool ValidarMovimiento(Casilla inicio, Casilla Final)
         {
             throw new NotImplementedException();
         }
-        public override bool ValidarPosicion(Casilla casillaEnLaQueEstoy, Casilla casillaALaQuePretendoMoverme)
+        public override bool validarCaptura(Casilla casillaEnLaQueEstoy, Casilla casillaALaQuePretendoMoverme)
         {
             throw new NotImplementedException();
         }
