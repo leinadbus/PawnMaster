@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PawnMaster", "PawnMaster.csproj", "{E293004E-8E3E-4BB3-B477-8C7133A09CCB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PawnMaster", "PawnMaster.csproj", "{E293004E-8E3E-4BB3-B477-8C7133A09CCB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PawnMaster.API", "..\PawnMaster.API\PawnMaster.API.csproj", "{4CB5A548-77E0-455B-9597-5BD19660F686}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PawnMaster.Console", "..\PawnMaster.Console\PawnMaster.Console.csproj", "{3AD8BBD3-EB2E-41BF-BDA8-A4CC09B983EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{E293004E-8E3E-4BB3-B477-8C7133A09CCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E293004E-8E3E-4BB3-B477-8C7133A09CCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E293004E-8E3E-4BB3-B477-8C7133A09CCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CB5A548-77E0-455B-9597-5BD19660F686}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CB5A548-77E0-455B-9597-5BD19660F686}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CB5A548-77E0-455B-9597-5BD19660F686}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CB5A548-77E0-455B-9597-5BD19660F686}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AD8BBD3-EB2E-41BF-BDA8-A4CC09B983EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AD8BBD3-EB2E-41BF-BDA8-A4CC09B983EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AD8BBD3-EB2E-41BF-BDA8-A4CC09B983EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AD8BBD3-EB2E-41BF-BDA8-A4CC09B983EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

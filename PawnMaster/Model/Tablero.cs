@@ -17,10 +17,44 @@ namespace PawnMaster.Model
 
         public string Estado { get; set; }
         public Dictionary<Coordenada, Casilla> TableroJuego { get; set; }
+        public List<Ficha> Cementerio = new();
+
+
         public Tablero()
         {
             Estado = "En curso";
             TableroJuego = CrearNuevoTablero();
+        }
+
+        /// <summary>
+        /// Mueve una ficha (si existe) de origen a destino. Si en destino hay ficha, la captura y la manda al cementerio.
+        /// </summary>
+        /// <param name="origen">Coordenadas de origen</param>
+        /// <param name="destino">Coordenadas de destino</param>
+        public void MoverFicha(Coordenada origen, Coordenada destino)
+        {
+            if (TableroJuego.TryGetValue(origen, out var casillaOrigen)
+                && TableroJuego.TryGetValue(destino, out var casillaDestino)
+                && casillaOrigen.Tengoficha())
+            {
+                if (casillaDestino.Tengoficha())
+                {
+                    EliminarFicha(destino);
+                }
+                var ficha = casillaOrigen.FichaActual;
+                casillaOrigen.EliminarFicha();
+                casillaDestino.SetFichaActual(ficha);
+            }
+        }
+
+        public void EliminarFicha(Coordenada coordenada)
+        {
+            if (TableroJuego.TryGetValue(coordenada, out var casilla))
+            {
+                var ficha = casilla.FichaActual;
+                casilla.EliminarFicha();
+                Cementerio.Add(ficha);
+            }
         }
 
         private Dictionary<Coordenada, Casilla> CrearNuevoTablero()

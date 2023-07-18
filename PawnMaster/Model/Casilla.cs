@@ -23,7 +23,7 @@ namespace PawnMaster.Model
          */
 
         public Coordenada Coordenadas { get; init; }
-        public Color Color { get; set; }
+        public Color Color { get; init; }
 
         // La forma no es útil en este progama
         //public int Forma { get; set; }
@@ -56,6 +56,11 @@ namespace PawnMaster.Model
 
         public bool SonLasFichasDelMismoColor (Casilla casillaAComparar)
         {
+            if (FichaActual == null || casillaAComparar.FichaActual == null)
+            {
+                return false;
+            }
+
             if(FichaActual.Color == casillaAComparar.FichaActual.Color)
             {
                 return true;

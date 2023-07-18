@@ -13,12 +13,14 @@ namespace PawnMaster.Model
 
         public DateTime Date { get; set; }
 
-        public Tablero Tablero { get; set; }
+        private Tablero Tablero { get; set; }
 
         public Jugador JugadorBlanco { get; set; }
         public Jugador JugadorNegro { get; set; }
 
         public List<string> ListaDeMovimientos { get; set; }
+
+        public Jugador JugadorActual { get; set; }
 
 
         public Partida(Jugador jugadorBlanco, Jugador jugadorNegro)
@@ -27,172 +29,146 @@ namespace PawnMaster.Model
             Date = DateTime.Now;
             JugadorBlanco = jugadorBlanco;
             JugadorNegro = jugadorNegro;
+            JugadorActual = JugadorBlanco;
             Tablero = new Tablero();
             ListaDeMovimientos = new List<string>();
         }
 
         public void CrearPartidaDeAjedrez()
         {
-
-            //Fichas Negras
-            var PeonNegro0 = new Peon(Color.Negro);
-            var PeonNegro1 = new Peon(Color.Negro);
-            var PeonNegro2 = new Peon(Color.Negro);
-            var PeonNegro3 = new Peon(Color.Negro);
-            var PeonNegro4 = new Peon(Color.Negro);
-            var PeonNegro5 = new Peon(Color.Negro);
-            var PeonNegro6 = new Peon(Color.Negro);
-            var PeonNegro7 = new Peon(Color.Negro);
-
-            var ReyNegro = new Rey(Color.Negro);
-            var ReinaNegra = new Reina(Color.Negro);
-
-            var TorreNegra0 = new Torre(Color.Negro);
-            var TorreNegra1 = new Torre(Color.Negro);
-
-            var CaballoNegro0 = new Caballo(Color.Negro);
-            var CaballoNegro1 = new Caballo(Color.Negro);
-
-            var AlfinNegro0 = new Alfil(Color.Negro);
-            var AlfinNegro1 = new Alfil(Color.Negro);
-
-
-            //Fichas Blancas
-            var PeonBlanco0 = new Peon(Color.Blanco);
-            var PeonBlanco1 = new Peon(Color.Blanco);
-            var PeonBlanco2 = new Peon(Color.Blanco);
-            var PeonBlanco3 = new Peon(Color.Blanco);
-            var PeonBlanco4 = new Peon(Color.Blanco);
-            var PeonBlanco5 = new Peon(Color.Blanco);
-            var PeonBlanco6 = new Peon(Color.Blanco);
-            var PeonBlanco7 = new Peon(Color.Blanco);
-
-            var ReyBlanco = new Rey(Color.Blanco);
-            var ReinaBlanco = new Reina(Color.Blanco);
-
-            var TorreBlanco0 = new Torre(Color.Blanco);
-            var TorreBlanco1 = new Torre(Color.Blanco);
-
-            var CaballoBlanco0 = new Caballo(Color.Blanco);
-            var CaballoBlanco1 = new Caballo(Color.Blanco);
-
-            var AlfinBlanco0 = new Alfil(Color.Blanco);
-            var AlfinBlanco1 = new Alfil(Color.Blanco);
-
             //Posicionamiento de las fichas Negras
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('A', 8), TorreNegra0);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('B', 8), CaballoNegro0);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('C', 8), AlfinNegro0);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('D', 8), ReinaNegra);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('E', 8), ReyNegro);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('F', 8), AlfinNegro1);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('G', 8), CaballoNegro1);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('H', 8), TorreNegra1);
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('A', 8), new Torre(Color.Negro));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('B', 8), new Caballo(Color.Negro));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('C', 8), new Alfil(Color.Negro));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('D', 8), new Reina(Color.Negro));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('E', 8), new Rey(Color.Negro));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('F', 8), new Alfil(Color.Negro));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('G', 8), new Caballo(Color.Negro));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('H', 8), new Torre(Color.Negro));
 
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('A', 7), PeonNegro0);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('B', 7), PeonNegro1);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('C', 7), PeonNegro2);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('D', 7), PeonNegro3);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('E', 7), PeonNegro4);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('F', 7), PeonNegro5);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('G', 7), PeonNegro6);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('H', 7), PeonNegro7);
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('A', 7), new Peon(Color.Negro));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('B', 7), new Peon(Color.Negro));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('C', 7), new Peon(Color.Negro));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('D', 7), new Peon(Color.Negro));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('E', 7), new Peon(Color.Negro));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('F', 7), new Peon(Color.Negro));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('G', 7), new Peon(Color.Negro));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('H', 7), new Peon(Color.Negro));
 
 
-            ////Posicionamiento de las fichas Blancas
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('A', 1), TorreBlanco0);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('B', 1), CaballoBlanco0);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('C', 1), AlfinBlanco0);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('D', 1), ReinaBlanco);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('E', 1), ReyBlanco);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('F', 1), AlfinBlanco1);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('G', 1), CaballoBlanco1);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('H', 1), TorreBlanco1);
+            //Posicionamiento de las fichas Blancas
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('A', 1), new Torre(Color.Blanco));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('B', 1), new Caballo(Color.Blanco));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('C', 1), new Alfil(Color.Blanco));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('D', 1), new Reina(Color.Blanco));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('E', 1), new Rey(Color.Blanco));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('F', 1), new Alfil(Color.Blanco));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('G', 1), new Caballo(Color.Blanco));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('H', 1), new Torre(Color.Blanco));
 
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('A', 2), PeonBlanco0);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('B', 2), PeonBlanco1);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('C', 2), PeonBlanco2);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('D', 2), PeonBlanco3);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('E', 2), PeonBlanco4);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('F', 2), PeonBlanco5);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('G', 2), PeonBlanco6);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('H', 2), PeonBlanco7);
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('A', 2), new Peon(Color.Blanco));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('B', 2), new Peon(Color.Blanco));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('C', 2), new Peon(Color.Blanco));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('D', 2), new Peon(Color.Blanco));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('E', 2), new Peon(Color.Blanco));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('F', 2), new Peon(Color.Blanco));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('G', 2), new Peon(Color.Blanco));
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('H', 2), new Peon(Color.Blanco));
 
         }
 
-
-        public void EjecutarTurno(string notacion)
+        private void AlternarJugador()
         {
-            Movimiento movimiento = new Movimiento();
-            if (movimiento.comprobarNotaciónTipoPiezaDada(notacion))
+            if (JugadorActual == JugadorBlanco)
             {
-                movimiento.ComprobarSiEsCaptura(notacion);
-                if (movimiento.EsCaptura)
-                {
-                    //Recogemos la notación en el objeto
-                    movimiento.RecogerPiezaYCaptura(notacion);
-                    //Recogemos del tablero las Casillas para hacer comprobaciones
-                    Casilla casillaOrigen = Tablero.SeleccionarCasilla(movimiento.CoordenadaInicial.PosicionHorizontal, movimiento.CoordenadaInicial.PosicionVertical);
-                    Casilla casillaDestino = Tablero.SeleccionarCasilla(movimiento.CoordenadaFinal.PosicionHorizontal, movimiento.CoordenadaFinal.PosicionVertical);
-                    
-                    //Si la casillaDestino tiene una ficha en posesión y NO son del mismo color entonces comprobarmos los movimientos
-                    if (casillaDestino.Tengoficha() && !casillaOrigen.SonLasFichasDelMismoColor(casillaDestino))
-                    {
-                        if (movimiento.FichaAMover == 'P')
-                        {
-                            if (casillaOrigen.FichaActual.validarCaptura(casillaOrigen, casillaDestino))
-                            {
-                                //Deberíamos poner el movimiento en la lista de movimientos y la ficha comida en una lista de fichas comidas
-                               
-                                    casillaOrigen.FichaActual.AumentarNumeroMovimientos();
-                                    casillaDestino.SetFichaActual(casillaOrigen.FichaActual);
-                                    casillaOrigen.EliminarFicha();
-                            }
-                            else
-                            {
-                                Console.WriteLine("El movimiento no se puede ejecutar");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("No existe ficha enemiga en la casilla de destino");
-                    }
-
-                }
-                else
-                {
-                    //Recogemos la notación en el objeto
-                    movimiento.RecogerPiezaYMovimiento(notacion);
-                    //Recogemos del tablero las Casillas para hacer comprobaciones
-                    Casilla casillaOrigen = Tablero.SeleccionarCasilla(movimiento.CoordenadaInicial.PosicionHorizontal, movimiento.CoordenadaInicial.PosicionVertical);
-                    Casilla casillaDestino = Tablero.SeleccionarCasilla(movimiento.CoordenadaFinal.PosicionHorizontal, movimiento.CoordenadaFinal.PosicionVertical);
-                    if (casillaOrigen.FichaActual != null)
-                    {
-                        if (movimiento.FichaAMover == 'P')
-                        {
-                            if (casillaOrigen.FichaActual.ValidarMovimiento(casillaOrigen, casillaDestino))
-                            {
-                                Console.WriteLine(casillaOrigen.FichaActual.NumeroMovimientos);
-                                casillaOrigen.FichaActual.AumentarNumeroMovimientos();
-                                Console.WriteLine(casillaOrigen.FichaActual.NumeroMovimientos);
-                                casillaDestino.SetFichaActual(casillaOrigen.FichaActual);
-                                casillaOrigen.EliminarFicha();
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Casilla seleccionada no contiene ninguna ficha");
-                    }
-                   
-                }
-
+                JugadorActual = JugadorNegro;
             }
             else
             {
-                Console.WriteLine("Notación de movimiento incorrecta.");
+                JugadorActual = JugadorBlanco;
             }
+        }
+
+        public void MostrarEstadoPartida()
+        {
+            Console.WriteLine($"TURNO DE {JugadorActual.Nombre}");
+            Console.WriteLine($"ULTIMO MOVIMIENTO FUE: {ListaDeMovimientos.LastOrDefault()}");
+            PintarCementerio();
+
+            Tablero.MostrarEstadoDelTablero();
+        }
+
+        private void PintarCementerio()
+        {
+            Console.Write("PIEZAS CAPTURADAS: ");
+            foreach (var pieza in Tablero.Cementerio)
+            {
+                Console.ForegroundColor = pieza.Color == Color.Blanco ? ConsoleColor.Cyan : ConsoleColor.Magenta;
+                Console.Write(pieza.Simbolo);
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write(" ");
+            }
+            Console.WriteLine();
+        }
+
+        private void RegistrarMovimiento(string movimiento)
+        {
+            ListaDeMovimientos.Add(movimiento);
+        }
+
+        public void EjecutarTurno(string notacion)
+        {
+            if (!Movimiento.ComprobarNotacionMovimientoEsValida(notacion))
+            {
+                // Si no es válido
+                Console.WriteLine("Notación de movimiento incorrecta.");
+                return;
+            }
+
+            var movimiento = new Movimiento(notacion);
+            var casillaOrigen = Tablero.SeleccionarCasilla(movimiento.CoordenadaInicial.PosicionHorizontal, movimiento.CoordenadaInicial.PosicionVertical);
+            var casillaDestino = Tablero.SeleccionarCasilla(movimiento.CoordenadaFinal.PosicionHorizontal, movimiento.CoordenadaFinal.PosicionVertical);
+
+            if (!casillaOrigen.Tengoficha())
+            {
+                Console.WriteLine("Casilla seleccionada no contiene ninguna ficha");
+                return;
+            }
+
+            // Si es mover, no puede haber ficha en destino
+            if (!movimiento.EsCaptura && casillaDestino.Tengoficha())
+            {
+                Console.WriteLine("Casilla seleccionada ya contiene una ficha");
+                return;
+            }
+
+            // Si es capturar tiene ficha y es de diferente color, se captura
+            if (movimiento.EsCaptura && casillaDestino.Tengoficha() && casillaOrigen.SonLasFichasDelMismoColor(casillaDestino))
+            {
+                Console.WriteLine("No existe ficha enemiga en la casilla de destino");
+                return;
+            }
+
+            bool movimientoValido;
+            if (movimiento.EsCaptura)
+            {
+                movimientoValido = casillaOrigen.FichaActual.validarCaptura(casillaOrigen, casillaDestino);
+            }
+            else
+            {
+                movimientoValido = casillaOrigen.FichaActual.ValidarMovimiento(casillaOrigen, casillaDestino);
+            }
+
+            if(!movimientoValido)
+            {
+                Console.WriteLine("El movimiento no se puede ejecutar");
+                return;
+            }
+
+            casillaOrigen.FichaActual.AumentarNumeroMovimientos();
+            Tablero.MoverFicha(casillaOrigen.Coordenadas, casillaDestino.Coordenadas);
+            RegistrarMovimiento(notacion);
+            AlternarJugador();
         }
     }
 }

@@ -34,7 +34,7 @@ namespace PawnMaster.Model
             //if(NumeroMovimientos == 0 && DiferenciaPosicionesFilas == 1 || DiferenciaPosicionesFilas == 2) { }
             if (Color == Color.Blanco && NumeroMovimientos == 0 && DiferenciaPosicionesColumnas == 0 && (DiferenciaPosicionesFilas == 1 || DiferenciaPosicionesFilas == 2))
             {
-                    sePodriaMover = true;
+                sePodriaMover = true;
             }
             else if (Color == Color.Blanco && NumeroMovimientos != 0 && DiferenciaPosicionesColumnas == 0 && DiferenciaPosicionesFilas == 1)
             {
@@ -42,7 +42,7 @@ namespace PawnMaster.Model
             }
             else if (Color == Color.Negro && NumeroMovimientos == 0 && DiferenciaPosicionesColumnas == 0 && (DiferenciaPosicionesFilas == -1 || DiferenciaPosicionesFilas == -2))
             {
-                    sePodriaMover = true;
+                sePodriaMover = true;
             }
             else if (Color == Color.Negro && NumeroMovimientos != 0 && DiferenciaPosicionesColumnas == 0 && DiferenciaPosicionesFilas == -1)
             {
