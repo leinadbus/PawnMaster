@@ -31,7 +31,7 @@ namespace PawnMaster.Model
             ListaDeMovimientos = new List<string>();
         }
 
-        public void CrearPartidaDeAjedrez ()
+        public void CrearPartidaDeAjedrez()
         {
 
             //Fichas Negras
@@ -91,7 +91,7 @@ namespace PawnMaster.Model
 
             this.Tablero.AñadirFichaAlTablero(new Coordenada('A', 7), PeonNegro0);
             this.Tablero.AñadirFichaAlTablero(new Coordenada('B', 7), PeonNegro1);
-            this.Tablero.AñadirFichaAlTablero(new Coordenada('C', 3), PeonNegro2);
+            this.Tablero.AñadirFichaAlTablero(new Coordenada('C', 7), PeonNegro2);
             this.Tablero.AñadirFichaAlTablero(new Coordenada('D', 7), PeonNegro3);
             this.Tablero.AñadirFichaAlTablero(new Coordenada('E', 7), PeonNegro4);
             this.Tablero.AñadirFichaAlTablero(new Coordenada('F', 7), PeonNegro5);
@@ -120,196 +120,79 @@ namespace PawnMaster.Model
 
         }
 
-        public bool existeFichaEnCasillaDestino (Casilla casillaDestino)
+
+        public void EjecutarTurno(string notacion)
         {
-            if(casillaDestino.FichaActual == null)
+            Movimiento movimiento = new Movimiento();
+            if (movimiento.comprobarNotaciónTipoPiezaDada(notacion))
             {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-
-        }
-
-        public bool FichaEnCasillaDestinoEsDelMismoColor (Ficha fichaActual, Ficha fichaDestino)
-        {
-            if(fichaActual.Color == fichaDestino.Color)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        //public (char, string, string) RecogerDatosDelMovimientoDelUsuario (String movimientoUsuario)
-        //{
-        //    char piezaAMover = ' ';
-        //    string nuevomovimiento = "";
-        //    //Está vacio??
-        //    if (!string.IsNullOrEmpty(movimientoUsuario))
-        //        {
-        //        //Eliminamos cualquier espacio en blanco que pueda haber
-        //        movimientoUsuario = movimientoUsuario.Trim();
-        //        movimientoUsuario = movimientoUsuario.Replace(" ", "");
-                
-
-        //            //Empieza con una mayúscula?
-        //            if (char.IsUpper(movimientoUsuario[0]))
-        //            {
-        //            //Le quitamos la primera posición que es mayúscula (La podemos guardar en alguna variable)
-        //            piezaAMover = movimientoUsuario[0];
-                        
-        //                for (int i = 1; i < movimientoUsuario.Length; i++)
-        //                {
-        //                    nuevomovimiento += movimientoUsuario[i];
-        //                }
-        //            }
-        //            else
-        //            {
-        //                nuevomovimiento = movimientoUsuario;
-        //            }
-
-        //            //Contiene una x??
-        //            if (nuevomovimiento.Contains("x"))
-        //            {
-        //                //El tratamiento de separación es diferente si contiene una x de no
-        //                //El fín es diferente, ya que no movemos, atacamos
-
-        //                string[] movimientos = nuevomovimiento.Split("x");
-        //                string casillaInicial = movimientos[0];
-        //                string casillaFinalAComer = movimientos[1];
-        //                Console.WriteLine("Pieza a mover: " + piezaAMover);
-        //                Console.WriteLine("Casilla Inicial: " + casillaInicial);
-        //                Console.WriteLine("Casilla a comer: " + casillaFinalAComer);
-        //            return (piezaAMover, casillaInicial, casillaFinalAComer);
-        //        }
-        //            else
-        //            {
-        //                //Este fín es solamente moverse, no comer
-        //                int mitad = nuevomovimiento.Length / 2;
-        //                string parte1 = nuevomovimiento.Substring(0, mitad);
-        //                string parte2 = nuevomovimiento.Substring(mitad);
-        //                Console.WriteLine("Pieza a mover: " + piezaAMover);
-        //                Console.WriteLine("Casilla Inicial: " + parte1);
-        //                Console.WriteLine("Casilla Destino: " + parte2);
-        //            return (piezaAMover, parte1, parte2);
-        //        }
-        //        }
-
-        //        else
-        //        {
-        //            Console.WriteLine("Por favor introduzca un movimiento adecuado");
-        //        }
-        //    return (piezaAMover, string.Empty, string.Empty);
-        //}
-
-        public bool ComprobarSiEsCaptura(String movimientoUsuario)
-        {
-                if (movimientoUsuario.Contains('x') || movimientoUsuario.Contains('X'))
+                movimiento.ComprobarSiEsCaptura(notacion);
+                if (movimiento.EsCaptura)
                 {
-                    return true;
-                }
-                else return false;
-        }
-
-        public char RecogerCaracterCaptura(String movimientoUsuario)
-        {
-            if (movimientoUsuario.Contains('x') )
-            {
-                return 'x';
-            }
-            else return 'X'; 
-        }
-
-        public (char, string) RecogerPiezaYMovimientoOCaptura (String movimientoUsuario)
-        {
-            char piezaAMover = ' ';
-            string nuevomovimiento = "";
-            if (char.IsUpper(movimientoUsuario[0]))
-            {
-                //Le quitamos la primera posición que es mayúscula (La podemos guardar en alguna variable)
-                piezaAMover = movimientoUsuario[0];
-
-                for (int i = 1; i < movimientoUsuario.Length; i++)
-                {
-                    nuevomovimiento += movimientoUsuario[i];
-                }
-            }
-            else
-            {
-                nuevomovimiento = movimientoUsuario;
-            }
-            return (piezaAMover, nuevomovimiento);
-        }
-
-
-        public ( string, string) RecogerDatosDeLaCaptura(String nuevomovimiento, char caracterCaptura)
-        {
-            string[] movimientos = nuevomovimiento.Split(caracterCaptura);
-            string casillaInicial = movimientos[0];
-            string casillaFinalAComer = movimientos[1];
-
-            return (casillaInicial, casillaFinalAComer);
-        }
-
-        public (string, string) RecogerDatosDelMovimiento(String nuevomovimiento)
-        {
-            int mitad = nuevomovimiento.Length / 2;
-            string parte1 = nuevomovimiento.Substring(0, mitad);
-            string parte2 = nuevomovimiento.Substring(mitad);
-
-            return (parte1, parte2);
-
-        }
-
-        public bool ComprobarMovimientoCapturaPeon (Casilla casillaEnLaQueEstoy, Casilla casillaALaQuePretendoMoverme)
-        {
-            bool sePodriaMover = false;
-
-            //Posicion Inicial
-            var FilaPosicionActual = casillaEnLaQueEstoy.Coordenadas.PosicionVertical;
-            var ColumnaPosicionActual = casillaEnLaQueEstoy.Coordenadas.PosicionHorizontal;
-
-            //Posicion Final
-            var FilaPosicionfinal = casillaALaQuePretendoMoverme.Coordenadas.PosicionVertical;
-            var ColumnaPosicionFinal = casillaALaQuePretendoMoverme.Coordenadas.PosicionHorizontal;
-
-            //Diferencia de filas (Dirección)
-            var DiferenciaPosicionesFilas = FilaPosicionfinal - FilaPosicionActual;
-            var DiferenciaPosicionesColumnas = ColumnaPosicionFinal - ColumnaPosicionActual;
-
-            
-
-            if (DiferenciaPosicionesFilas == 1 || DiferenciaPosicionesFilas == 2 || DiferenciaPosicionesFilas == -1 || DiferenciaPosicionesFilas == -2)  //n1 La cantidad de casillas es correcta?
-            {
-                if (casillaEnLaQueEstoy.FichaActual != null)
-                {
-
-                if (casillaEnLaQueEstoy.FichaActual.Color == Color.Blanco)
-                {
-
-                     if (DiferenciaPosicionesFilas == 1 && (DiferenciaPosicionesColumnas == 1 || DiferenciaPosicionesColumnas == -1))
+                    //Recogemos la notación en el objeto
+                    movimiento.RecogerPiezaYCaptura(notacion);
+                    //Recogemos del tablero las Casillas para hacer comprobaciones
+                    Casilla casillaOrigen = Tablero.SeleccionarCasilla(movimiento.CoordenadaInicial.PosicionHorizontal, movimiento.CoordenadaInicial.PosicionVertical);
+                    Casilla casillaDestino = Tablero.SeleccionarCasilla(movimiento.CoordenadaFinal.PosicionHorizontal, movimiento.CoordenadaFinal.PosicionVertical);
+                    
+                    //Si la casillaDestino tiene una ficha en posesión y NO son del mismo color entonces comprobarmos los movimientos
+                    if (casillaDestino.Tengoficha() && !casillaOrigen.SonLasFichasDelMismoColor(casillaDestino))
                     {
-                        sePodriaMover = true;
+                        if (movimiento.FichaAMover == 'P')
+                        {
+                            if (casillaOrigen.FichaActual.validarCaptura(casillaOrigen, casillaDestino))
+                            {
+                                //Deberíamos poner el movimiento en la lista de movimientos y la ficha comida en una lista de fichas comidas
+                               
+                                    casillaOrigen.FichaActual.AumentarNumeroMovimientos();
+                                    casillaDestino.SetFichaActual(casillaOrigen.FichaActual);
+                                    casillaOrigen.EliminarFicha();
+                            }
+                            else
+                            {
+                                Console.WriteLine("El movimiento no se puede ejecutar");
+                            }
+                        }
                     }
+                    else
+                    {
+                        Console.WriteLine("No existe ficha enemiga en la casilla de destino");
+                    }
+
                 }
                 else
                 {
-
-                    if (DiferenciaPosicionesFilas == -1 && (DiferenciaPosicionesColumnas == 1 || DiferenciaPosicionesColumnas == -1))
+                    //Recogemos la notación en el objeto
+                    movimiento.RecogerPiezaYMovimiento(notacion);
+                    //Recogemos del tablero las Casillas para hacer comprobaciones
+                    Casilla casillaOrigen = Tablero.SeleccionarCasilla(movimiento.CoordenadaInicial.PosicionHorizontal, movimiento.CoordenadaInicial.PosicionVertical);
+                    Casilla casillaDestino = Tablero.SeleccionarCasilla(movimiento.CoordenadaFinal.PosicionHorizontal, movimiento.CoordenadaFinal.PosicionVertical);
+                    if (casillaOrigen.FichaActual != null)
                     {
-                        sePodriaMover = true;
+                        if (movimiento.FichaAMover == 'P')
+                        {
+                            if (casillaOrigen.FichaActual.ValidarMovimiento(casillaOrigen, casillaDestino))
+                            {
+                                Console.WriteLine(casillaOrigen.FichaActual.NumeroMovimientos);
+                                casillaOrigen.FichaActual.AumentarNumeroMovimientos();
+                                Console.WriteLine(casillaOrigen.FichaActual.NumeroMovimientos);
+                                casillaDestino.SetFichaActual(casillaOrigen.FichaActual);
+                                casillaOrigen.EliminarFicha();
+                            }
+                        }
                     }
+                    else
+                    {
+                        Console.WriteLine("Casilla seleccionada no contiene ninguna ficha");
+                    }
+                   
                 }
-                }
+
             }
-            return sePodriaMover;
+            else
+            {
+                Console.WriteLine("Notación de movimiento incorrecta.");
+            }
         }
-
-
     }
 }
