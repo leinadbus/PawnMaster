@@ -47,11 +47,20 @@ namespace PawnMaster.Model
             this.FichaActual = ficha;
         }
 
-        public bool Tengoficha(int posicionHorizontal, int posicionVertical)
+        public bool Tengoficha()
         {
             bool tieneficha = false;
-            if (this.FichaActual != null && this.Coordenadas.PosicionHorizontal == posicionHorizontal && this.Coordenadas.PosicionVertical == posicionVertical){ tieneficha = true; }
+            if (this.FichaActual != null){ tieneficha = true; }
             return tieneficha;
+        }
+
+        public bool SonLasFichasDelMismoColor (Casilla casillaAComparar)
+        {
+            if(FichaActual.Color == casillaAComparar.FichaActual.Color)
+            {
+                return true;
+            }
+            else return false;
         }
     }
 }
