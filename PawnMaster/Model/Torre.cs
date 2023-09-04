@@ -13,13 +13,38 @@ namespace PawnMaster.Model
             Simbolo = 'R';
         }
 
-        public override bool ValidarMovimiento(Casilla inicio, Casilla Final)
+        public override bool ValidarMovimiento(Casilla casillaEnLaQueEstoy, Casilla casillaALaQuePretendoMoverme)
         {
-            throw new NotImplementedException();
+            bool sePodriaMover = false;
+
+            //Posicion Inicial
+            var FilaPosicionActual = casillaEnLaQueEstoy.Coordenadas.PosicionVertical;
+            var ColumnaPosicionActual = casillaEnLaQueEstoy.Coordenadas.PosicionHorizontal;
+
+            //Posicion Final
+            var FilaPosicionfinal = casillaALaQuePretendoMoverme.Coordenadas.PosicionVertical;
+            var ColumnaPosicionFinal = casillaALaQuePretendoMoverme.Coordenadas.PosicionHorizontal;
+
+            //Diferencia de filas (Dirección)
+            var DiferenciaPosicionesFilas = FilaPosicionfinal - FilaPosicionActual;
+            var DiferenciaPosicionesColumnas = ColumnaPosicionFinal - ColumnaPosicionActual;
+
+
+            //si columna es 0 fila puede ser infinito desde 1 o -1 y viceversa
+            if (DiferenciaPosicionesFilas == 0 && (DiferenciaPosicionesColumnas <0 || DiferenciaPosicionesColumnas >0))
+            {
+                sePodriaMover = true;
+            }
+            else if (DiferenciaPosicionesColumnas == 0 && (DiferenciaPosicionesFilas < 0 || DiferenciaPosicionesFilas > 0))
+            {
+                sePodriaMover = true;
+            }
+            
+            return sePodriaMover;
         }
         public override bool validarCaptura(Casilla casillaEnLaQueEstoy, Casilla casillaALaQuePretendoMoverme)
         {
-            throw new NotImplementedException();
+            return ValidarMovimiento(casillaEnLaQueEstoy, casillaALaQuePretendoMoverme);
         }
     }
 }
