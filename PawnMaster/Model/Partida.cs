@@ -141,8 +141,21 @@ namespace PawnMaster.Model
                 Console.WriteLine("Casilla seleccionada ya contiene una ficha");
                 return;
             }
+            //Si es mover o capturar como Torre, Alfil, reina, no puede haber fichas en camino
+            //Si es Torre
+            if(movimiento.FichaAMover == 'R')
+            {
+                if(!Tablero.SaberSiHayFichasEnElCaminoParaTorre(casillaOrigen, casillaDestino))
+                {
+                    Console.WriteLine("Existe una ficha en la dirección indicada");
+                    return;
+                }
+            }
+            //Si es Reina
 
-            // Si es capturar tiene ficha y es de diferente color, se captura
+            //Si es Alfil
+
+            // Si es capturar, tiene ficha y es de diferente color, se captura
             if (movimiento.EsCaptura && casillaDestino.Tengoficha() && casillaOrigen.SonLasFichasDelMismoColor(casillaDestino))
             {
                 Console.WriteLine("No existe ficha enemiga en la casilla de destino");

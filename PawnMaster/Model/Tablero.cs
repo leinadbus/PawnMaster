@@ -173,5 +173,82 @@ namespace PawnMaster.Model
             }
         }
 
+        public bool SaberSiHayFichasEnElCaminoParaTorre(Casilla casillaEnLaQueEstoy, Casilla casillaALaQuePretendoMoverme)
+        {
+            bool sePodriaMover = true;
+
+            //Posicion Inicial
+            var FilaPosicionActual = casillaEnLaQueEstoy.Coordenadas.PosicionVertical;
+            var ColumnaPosicionActual = casillaEnLaQueEstoy.Coordenadas.PosicionHorizontal;
+
+            //Posicion Final
+            var FilaPosicionfinal = casillaALaQuePretendoMoverme.Coordenadas.PosicionVertical;
+            var ColumnaPosicionFinal = casillaALaQuePretendoMoverme.Coordenadas.PosicionHorizontal;
+
+            //Si las filas tienen el mismo número, el movimiento es recto en sentido columnas
+            if (FilaPosicionActual == FilaPosicionfinal)
+            {
+                //Si el movimiento es positivo, es decir, que el movimiento vaya en aumentos de numeros
+                if (ColumnaPosicionFinal - ColumnaPosicionActual > 0)
+                {
+                    for (char ComprobandoFilas = ++ColumnaPosicionActual; ComprobandoFilas < ColumnaPosicionFinal; ComprobandoFilas++)
+                    {
+                        var casillaComprobada = SeleccionarCasilla(ComprobandoFilas, FilaPosicionActual);
+
+                        if (casillaComprobada.Tengoficha())
+                        {
+                            sePodriaMover = false;
+                            return sePodriaMover;
+                        }
+                    }
+                }
+                //Si el movimiento es negativo, es decir, que el movimiento vaya en decremento de numeros
+                if (ColumnaPosicionFinal - ColumnaPosicionActual < 0)
+                {
+                    for (char ComprobandoFilas = --ColumnaPosicionActual; ComprobandoFilas > ColumnaPosicionFinal; ComprobandoFilas--)
+                    {
+                        var casillaComprobada = SeleccionarCasilla(ComprobandoFilas, FilaPosicionActual);
+
+                        if (casillaComprobada.Tengoficha())
+                        {
+                            sePodriaMover = false;
+                            return sePodriaMover;
+                        }
+                    }
+                }
+            }
+            else if (ColumnaPosicionActual == ColumnaPosicionFinal)
+            {
+                if(FilaPosicionfinal-FilaPosicionActual > 0)
+                {
+                    for (int ComprobandoColumnas = ++FilaPosicionActual; ComprobandoColumnas < FilaPosicionfinal; ComprobandoColumnas++)
+                    {
+                        var casillaComprobada = SeleccionarCasilla(ColumnaPosicionActual, ComprobandoColumnas);
+
+                        if (casillaComprobada.Tengoficha())
+                        {
+                            sePodriaMover = false;
+                            return sePodriaMover;
+                        }
+                    }
+                }
+                if (FilaPosicionfinal - FilaPosicionActual < 0)
+                {
+                    for (int ComprobandoColumnas = --FilaPosicionActual; ComprobandoColumnas > FilaPosicionfinal; ComprobandoColumnas--)
+                    {
+                        var casillaComprobada = SeleccionarCasilla(ColumnaPosicionActual, ComprobandoColumnas);
+
+                        if (casillaComprobada.Tengoficha())
+                        {
+                            sePodriaMover = false;
+                            return sePodriaMover;
+                        }
+                    }
+                }
+            }
+
+            return sePodriaMover;
+        }
+
     }
 }
