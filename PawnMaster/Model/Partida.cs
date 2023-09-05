@@ -134,7 +134,12 @@ namespace PawnMaster.Model
                 Console.WriteLine("Casilla seleccionada no contiene ninguna ficha");
                 return;
             }
-
+            //Si la ficha no coincide con la del movimiento
+            if(char.ToUpper(movimiento.FichaAMover) != char.ToUpper(casillaOrigen.FichaActual.Simbolo))
+            {
+                Console.WriteLine("Ficha indicada no coincide con la que existe en la casilla");
+                return;
+            }
             // Si es mover, no puede haber ficha en destino
             if (!movimiento.EsCaptura && casillaDestino.Tengoficha())
             {
