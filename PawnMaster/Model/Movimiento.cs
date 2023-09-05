@@ -34,6 +34,8 @@ namespace PawnMaster.Model
         /// </summary>
         public static bool ComprobarNotacionMovimientoEsValida(string inputUsuario)
         {
+            if (string.IsNullOrEmpty(inputUsuario)) return false;
+
             if (char.IsUpper(inputUsuario[0]) && (inputUsuario.Length == 6 || inputUsuario.Length == 5))
             {
                 return true;
