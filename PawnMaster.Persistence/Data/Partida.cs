@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FluentNHibernate.Conventions.Inspections;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,18 +12,15 @@ namespace PawnMaster.Persistence.Data
 {
     public class Partidas
     {
-        [Key]
+
         public int Id { get; set; }
+        public enum Turno { white, black }
+        public TimeSpan TiempoDeJuego { get; set; }
+        public bool PartidaEnJuego { get; set; }
 
-        public enum Turno { blancas, negras }
-
-        public TimeOnly TiempoDeJuego { get; set; }
-
-        [ForeignKey("jugadorBlancoId")]
         public int jugadorBlancoId { get; set; }
         public Jugadores JugadorB { get; set; }
 
-        [ForeignKey("jugadorNegroId")]
         public int jugadorNegroId { get; set; }
         public Jugadores JugadorN { get; set; }
     }
