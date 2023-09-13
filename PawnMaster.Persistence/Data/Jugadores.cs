@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PawnMaster.Persistence.Data
 {
-    internal class Jugadores
+    public class Jugadores
     {
         [Key]
         public int Id { get; set; }
