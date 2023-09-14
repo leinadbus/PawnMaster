@@ -10,18 +10,19 @@ using System.Threading.Tasks;
 
 namespace PawnMaster.Persistence.Data
 {
-    public class Partidas
+    public class Partida
     {
 
         public int Id { get; set; }
         public enum Turno { white, black }
         public TimeSpan TiempoDeJuego { get; set; }
         public bool PartidaEnJuego { get; set; }
-
-        public int jugadorBlancoId { get; set; }
-        public Jugadores JugadorB { get; set; }
-
-        public int jugadorNegroId { get; set; }
-        public Jugadores JugadorN { get; set; }
+        public int Ganador { get; set; }
+       
+        public int JugadorBlancoId { get; set; }
+        public Jugador JugadorBlanco { get; set; }
+        
+        public int JugadorNegroId { get; set; }
+        public Jugador JugadorNegro { get; set; }
     }
 }
