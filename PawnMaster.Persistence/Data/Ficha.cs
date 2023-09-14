@@ -8,15 +8,12 @@ using System.Threading.Tasks;
 
 namespace PawnMaster.Persistence.Data
 {
-    public class Fichas
+    public class Ficha
     {
-        [Key]
         public int Id { get; set; }
-
-        [ForeignKey("partidaId")]
+       
         public int partidaId { get; set; }
-        public Partidas Partida { get; set; }
-
+        public Partida Partida { get; set; }
         public enum TipoFicha { P, K, Q, R, N, B }
         public enum ColorFicha { White, Black }
         public int NumeroMovimientos { get; set; }
