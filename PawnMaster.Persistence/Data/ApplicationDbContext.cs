@@ -35,7 +35,7 @@ namespace PawnMaster.Persistence.Data
                 .HasForeignKey("JugadorNegroId")
                 .OnDelete(DeleteBehavior.Restrict).IsRequired();
 
-            var jugadores = builder.Entity<Jugador>();
+            var jugadores = builder.Entity<Usuario>();
             jugadores.HasKey(p => p.Id);
 
             var fichas = builder.Entity<Ficha>();
@@ -46,7 +46,7 @@ namespace PawnMaster.Persistence.Data
         }
 
         //Aquí agregamos los modelos
-        public DbSet<Jugador> Jugadores { get; set; }
+        public DbSet<Usuario> Jugadores { get; set; }
         public DbSet<Ficha> Fichas { get; set; }
         public DbSet<Partida> Partidas { get; set; }
 
