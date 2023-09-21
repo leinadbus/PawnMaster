@@ -1,5 +1,6 @@
 ﻿using FluentNHibernate.Conventions.Inspections;
 using Microsoft.EntityFrameworkCore;
+using PawnMaster.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -24,5 +25,6 @@ namespace PawnMaster.Persistence.Data
         
         public int JugadorNegroId { get; set; }
         public Usuario JugadorNegro { get; set; }
+        public string? ListaDeMovimientos { get; set; }
     }
 }
