@@ -1,6 +1,9 @@
 using PawnMaster.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using PawnMaster.API.Services;
+using PawnMaster.Persistence.Repositories;
+using PawnMaster.Persistence.Repositories.InterfaceRepository;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +12,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConexionSQL"));
 });
+
+//builder.Services.AddIdentity<Usuario, IdentityRole>().AddUserStore<ApplicationDbContext>();
+    //.AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddScoped<InterfazUsuarioRepository, UsuarioRepository>();
 
 // Add services to the container.
 
