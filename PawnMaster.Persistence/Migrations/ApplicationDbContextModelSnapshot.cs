@@ -53,42 +53,6 @@ namespace PawnMaster.Persistence.Migrations
                     b.ToTable("Fichas");
                 });
 
-            modelBuilder.Entity("PawnMaster.Persistence.Data.Jugador", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Correo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreacionCuenta")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("RutaImagen")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Jugadores");
-                });
-
             modelBuilder.Entity("PawnMaster.Persistence.Data.Partida", b =>
                 {
                     b.Property<int>("Id")
@@ -121,6 +85,41 @@ namespace PawnMaster.Persistence.Migrations
                     b.ToTable("Partidas");
                 });
 
+            modelBuilder.Entity("PawnMaster.Persistence.Data.Usuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Correo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreacionCuenta")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("RutaImagen")
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Jugadores");
+                });
+
             modelBuilder.Entity("PawnMaster.Persistence.Data.Ficha", b =>
                 {
                     b.HasOne("PawnMaster.Persistence.Data.Partida", "Partida")
@@ -134,13 +133,13 @@ namespace PawnMaster.Persistence.Migrations
 
             modelBuilder.Entity("PawnMaster.Persistence.Data.Partida", b =>
                 {
-                    b.HasOne("PawnMaster.Persistence.Data.Jugador", "JugadorBlanco")
+                    b.HasOne("PawnMaster.Persistence.Data.Usuario", "JugadorBlanco")
                         .WithMany("PartidasJugadasComoBlancas")
                         .HasForeignKey("JugadorBlancoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("PawnMaster.Persistence.Data.Jugador", "JugadorNegro")
+                    b.HasOne("PawnMaster.Persistence.Data.Usuario", "JugadorNegro")
                         .WithMany("PartidasJugadasComoNegras")
                         .HasForeignKey("JugadorNegroId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -151,7 +150,7 @@ namespace PawnMaster.Persistence.Migrations
                     b.Navigation("JugadorNegro");
                 });
 
-            modelBuilder.Entity("PawnMaster.Persistence.Data.Jugador", b =>
+            modelBuilder.Entity("PawnMaster.Persistence.Data.Usuario", b =>
                 {
                     b.Navigation("PartidasJugadasComoBlancas");
 
