@@ -20,9 +20,9 @@ namespace PawnMaster.Persistence.Data
         public int Ganador { get; set; }
        
         public int JugadorBlancoId { get; set; }
-        public Jugador JugadorBlanco { get; set; }
+        public Usuario JugadorBlanco { get; set; }
         
         public int JugadorNegroId { get; set; }
-        public Jugador JugadorNegro { get; set; }
+        public Usuario JugadorNegro { get; set; }
     }
 }
