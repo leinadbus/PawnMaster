@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PawnMaster.Persistence.Repositories.InterfaceRepository
 {
-    internal interface InterfazPartidaRepository
+    public interface InterfazPartidaRepository
     {
         bool GuardarEstadoPartida(Partida partida);
         Partida RecuperarEstadoPartida (int id);    
