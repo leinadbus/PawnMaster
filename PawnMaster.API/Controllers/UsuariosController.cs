@@ -16,14 +16,10 @@ namespace PawnMaster.API.Controllers
         private readonly InterfazUsuarioRepository _usRepo;
         protected RespuestaApi _respuestaApi;
 
-        public UsuariosController(
-            InterfazUsuarioRepository usRepo 
-            //IMapper mapper
-            )
+        public UsuariosController(InterfazUsuarioRepository usRepo)
         {
             _usRepo = usRepo;
             this._respuestaApi = new();
-            //_mapper = mapper;
         }
 
 
