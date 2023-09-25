@@ -12,8 +12,8 @@ using PawnMaster.Persistence.Data;
 namespace PawnMaster.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230921143202_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20230925162644_PruebaMigraciónActualización")]
+    partial class PruebaMigraciónActualización
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -63,7 +63,7 @@ namespace PawnMaster.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("Ganador")
+                    b.Property<int?>("Ganador")
                         .HasColumnType("int");
 
                     b.Property<int>("JugadorBlancoId")
@@ -72,11 +72,17 @@ namespace PawnMaster.Persistence.Migrations
                     b.Property<int>("JugadorNegroId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ListaDeMovimientos")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("PartidaEnJuego")
                         .HasColumnType("bit");
 
                     b.Property<TimeSpan>("TiempoDeJuego")
                         .HasColumnType("time");
+
+                    b.Property<int>("TurnoPartida")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -119,7 +125,7 @@ namespace PawnMaster.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Jugadores");
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("PawnMaster.Persistence.Data.Ficha", b =>

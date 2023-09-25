@@ -1,4 +1,5 @@
 ﻿using PawnMaster.Model;
+using PawnMaster.Persistence.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,8 @@ namespace PawnMaster.Persistence.Repositories.InterfaceRepository
 {
     public interface InterfazPartidaRepository
     {
-        bool GuardarEstadoPartida(Partida partida);
-        Partida RecuperarEstadoPartida (int id);    
+        public bool GuardarEstadoPartida(PartidaDto partida);
+        public bool CrearPartida(PartidaDto Partida, int IdBlanco, int IdNegro);
+        public PartidaDto RecuperarEstadoPartida(int id);
     }
 }

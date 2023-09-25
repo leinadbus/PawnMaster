@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PawnMaster.Persistence.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class MigracionInicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Jugadores",
+                name: "Usuarios",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -24,7 +24,7 @@ namespace PawnMaster.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Jugadores", x => x.Id);
+                    table.PrimaryKey("PK_Usuarios", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -35,23 +35,24 @@ namespace PawnMaster.Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TiempoDeJuego = table.Column<TimeSpan>(type: "time", nullable: false),
                     PartidaEnJuego = table.Column<bool>(type: "bit", nullable: false),
-                    Ganador = table.Column<int>(type: "int", nullable: false),
+                    Ganador = table.Column<int>(type: "int", nullable: true),
                     JugadorBlancoId = table.Column<int>(type: "int", nullable: false),
-                    JugadorNegroId = table.Column<int>(type: "int", nullable: false)
+                    JugadorNegroId = table.Column<int>(type: "int", nullable: false),
+                    ListaDeMovimientos = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Partidas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Partidas_Jugadores_JugadorBlancoId",
+                        name: "FK_Partidas_Usuarios_JugadorBlancoId",
                         column: x => x.JugadorBlancoId,
-                        principalTable: "Jugadores",
+                        principalTable: "Usuarios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Partidas_Jugadores_JugadorNegroId",
+                        name: "FK_Partidas_Usuarios_JugadorNegroId",
                         column: x => x.JugadorNegroId,
-                        principalTable: "Jugadores",
+                        principalTable: "Usuarios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -104,7 +105,7 @@ namespace PawnMaster.Persistence.Migrations
                 name: "Partidas");
 
             migrationBuilder.DropTable(
-                name: "Jugadores");
+                name: "Usuarios");
         }
     }
 }
