@@ -11,14 +11,14 @@ namespace PawnMaster.Persistence.Data
     public class Ficha
     {
         public int Id { get; set; }
-       
+        public char CaracterFicha { get; set; }
         public int partidaId { get; set; }
         public Partida Partida { get; set; }
         public enum TipoFicha { P, K, Q, R, N, B }
         public enum ColorFicha { White, Black }
         public int NumeroMovimientos { get; set; }
-        public char PosiciónHorizontal { get; set; } 
-        public int PosiciónVertical { get; set; }
+        public char? PosiciónHorizontal { get; set; } 
+        public int? PosiciónVertical { get; set; }
         public bool EnJuego { get; set; }
 
     }
