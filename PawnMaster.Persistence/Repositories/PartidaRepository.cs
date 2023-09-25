@@ -28,11 +28,36 @@ namespace PawnMaster.Persistence.Repositories
                 TiempoDeJuego = DateTime.Now - Partida.Date,
                 TurnoPartida = Data.Partida.Turno.white
             };
-         
+
             _bd.Partidas.Add(PartidaABaseDatos);
+            
+            //Bucle que vaya por todas las casillas, si función TengoFicha NO es Null, metemos esa ficha a la bbdd con el id de la partida.
+
+            //Aquí la comprobación del tablero
+            for (char caracter = 'A'; caracter <= 'H'; caracter++)
+            {
+                for (int numero = 1; numero < 9; numero++)
+                {
+                    var casilla = Partida.Tablero.SeleccionarCasilla(caracter, numero);
+                    if (casilla.Tengoficha())
+                    {
+                        var ficha = new Data.Ficha()
+                        {
+                            EnJuego = true,
+                            NumeroMovimientos = 0,
+                            PosiciónHorizontal = caracter,
+                            PosiciónVertical = numero,
+                            Partida = PartidaABaseDatos,
+                            CaracterFicha = casilla.FichaActual.Simbolo
+                            
+                        };
+                        _bd.Fichas.Add(ficha);
+                    }
+                }
+            }
+
             _bd.SaveChanges();
             return true;
-            //throw new NotImplementedException();
         }
 
         public bool GuardarEstadoPartida(PartidaDto partida)
