@@ -46,7 +46,7 @@ namespace PawnMaster.Persistence.Data
         }
 
         //Aquí agregamos los modelos
-        public DbSet<Usuario> Jugadores { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Ficha> Fichas { get; set; }
         public DbSet<Partida> Partidas { get; set; }
 

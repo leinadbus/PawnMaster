@@ -1,7 +1,7 @@
 ﻿using PawnMaster.Model;
 
 Jugador jugador = new Jugador { Nombre = "Daniel" };
-Jugador jugadora = new Jugador { Nombre = "Sergio tenia razon" };
+Jugador jugadora = new Jugador { Nombre = "Sergio" };
 Partida partida = new(jugador, jugadora);
 partida.CrearPartidaDeAjedrez();
 partida.MostrarEstadoPartida();

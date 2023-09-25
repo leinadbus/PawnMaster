@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using PawnMaster.API.Services;
 using PawnMaster.Persistence.Repositories;
 using PawnMaster.Persistence.Repositories.InterfaceRepository;
-using Microsoft.AspNet.Identity.EntityFramework;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +15,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //builder.Services.AddIdentity<Usuario, IdentityRole>().AddUserStore<ApplicationDbContext>();
     //.AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddScoped<InterfazUsuarioRepository, UsuarioRepository>();
-
+builder.Services.AddScoped<InterfazPartidaRepository, PartidaRepository>();
+//builder.Services.AddSingleton<InterfazPartidaRepository, PartidaRepository>();
 // Add services to the container.
 
 builder.Services.AddControllers();

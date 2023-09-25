@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
-using NHibernate.Util;
+﻿using NHibernate.Util;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
