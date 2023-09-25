@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using NHibernate.Mapping.ByCode.Impl;
 using PawnMaster.Model;
 using PawnMaster.Persistence.Data;
@@ -24,7 +23,7 @@ namespace PawnMaster.Persistence.Repositories
 
         public bool EsCorreoUnico(string correo)
         {
-            var correoUsuario = _bd.Jugadores.FirstOrDefault( u => u.Correo == correo );
+            var correoUsuario = _bd.Usuarios.FirstOrDefault( u => u.Correo == correo );
             if ( correoUsuario == null )
             {
                 return true;
@@ -34,12 +33,12 @@ namespace PawnMaster.Persistence.Repositories
 
         public Usuario GetJugador(int jugadorId)
         {
-            return _bd.Jugadores.FirstOrDefault(u => u.Id == jugadorId);
+            return _bd.Usuarios.FirstOrDefault(u => u.Id == jugadorId);
         }
 
         public ICollection<Usuario> GetJugadores()
         {
-            return _bd.Jugadores.OrderBy(u => u.Nombre).ToList(); ;
+            return _bd.Usuarios.OrderBy(u => u.Nombre).ToList(); ;
         }
 
         public bool Registro(UsuarioRegistroDto usuarioRegistroDto)
@@ -52,7 +51,7 @@ namespace PawnMaster.Persistence.Repositories
                 Role = "Usuario",
             };
 
-            _bd.Jugadores.Add(jugador);
+            _bd.Usuarios.Add(jugador);
 
             _bd.SaveChanges();
 
