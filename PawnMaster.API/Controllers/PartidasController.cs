@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PawnMaster.API.Dtos;
 using PawnMaster.Model;
+using PawnMaster.Persistence.Dtos;
 using PawnMaster.Persistence.Repositories;
 using PawnMaster.Persistence.Repositories.InterfaceRepository;
 using System.Net;
@@ -14,7 +15,7 @@ namespace PawnMaster.API.Controllers
     {
         private readonly InterfazPartidaRepository _paRepo;
         protected RespuestaApi _respuestaApi;
-        private Partida PartidaEnJuego;
+        //private Partida PartidaEnJuego;
         public PartidasController(InterfazPartidaRepository paRepo)
         {
             _paRepo = paRepo;
@@ -28,19 +29,30 @@ namespace PawnMaster.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public PartidaDtoAPI CrearPartida()
+        public PartidaDtoAPI CrearPartida( int IdJugadorBlanco, int IdJugadorNegro)
         {
-
+            //Los jugadores deberían entrar como parámetros de la función
             Jugador JugadorBlancoe = new Jugador { Nombre = "Daniel" };
             Jugador JugadorNegroe = new Jugador { Nombre = "Sergio" };
 
             Partida partida = new(JugadorBlancoe, JugadorNegroe);
             partida.CrearPartidaDeAjedrez();
+            var partidaDtoPersistence = new PartidaDto()
+            {
+                Date = DateTime.Now,
+                JugadorBlanco = JugadorBlancoe,
+                JugadorNegro = JugadorNegroe,
+                JugadorActual = JugadorBlancoe,
+                Tablero = partida.RetornarTablero(),
+            };
 
-
-
-            _respuestaApi.StatusCode = HttpStatusCode.OK;
-            _respuestaApi.IsSuccess = true;
+            //PODEMOS DEVOLVER UN TRUE O EL ID DE LA PARTIDA PARA SABER QUE PARTIDA ESTAMOS JUGANDO
+            //ESTE ES EL TRUE
+            if (_paRepo.CrearPartida(partidaDtoPersistence, IdJugadorBlanco, IdJugadorNegro)){
+                _respuestaApi.StatusCode = HttpStatusCode.OK;
+                _respuestaApi.IsSuccess = true;
+            }
+            
 
             var PartidaDto = new PartidaDtoAPI() {
             
@@ -50,14 +62,27 @@ namespace PawnMaster.API.Controllers
                 JugadorNegro = partida.JugadorNegro
             };
 
-            this.PartidaEnJuego = partida;
+            //this.PartidaEnJuego = partida;
             //HttpContext.Session.Set<Partida>("PartidaEnJuego", partida);
-            var repositorioPartida = new PartidaRepository();
-            repositorioPartida.Partida = PartidaEnJuego;
-            PartidaEnJuego.MostrarEstadoPartida();
+            //var repositorioPartida = new PartidaRepository();
+            //repositorioPartida.Partida = PartidaEnJuego;
+
+            //PartidaEnJuego.MostrarEstadoPartida();
             return PartidaDto;
         }
 
+        [HttpPost("movimiento")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public void HacerMovimiento(string notacion)
+        {
 
+            //PartidaEnJuego.EjecutarTurno(notacion);
+            //PartidaEnJuego.MostrarEstadoPartida();
+            
+        }
     }
 }
