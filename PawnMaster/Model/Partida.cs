@@ -77,6 +77,11 @@ namespace PawnMaster.Model
 
         }
 
+        public Tablero RetornarTablero ()
+        {
+            return this.Tablero;
+        }
+
         private void AlternarJugador()
         {
             if (JugadorActual == JugadorBlanco)
