@@ -16,6 +16,7 @@ namespace PawnMaster.Persistence.Data
         public Partida Partida { get; set; }
         public enum TipoFicha { P, K, Q, R, N, B }
         public enum ColorFicha { White, Black }
+        public ColorFicha Color { get; set; }
         public int NumeroMovimientos { get; set; }
         public char? PosiciónHorizontal { get; set; } 
         public int? PosiciónVertical { get; set; }
