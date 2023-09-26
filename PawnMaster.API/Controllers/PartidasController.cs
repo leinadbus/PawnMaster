@@ -29,7 +29,7 @@ namespace PawnMaster.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public PartidaDtoAPI CrearPartida( int IdJugadorBlanco, int IdJugadorNegro)
+        public PartidaDtoAPI CrearPartida(int IdJugadorBlanco, int IdJugadorNegro)
         {
             //Los jugadores deberían entrar como parámetros de la función
             Jugador JugadorBlancoe = new Jugador { Nombre = "Daniel" };
@@ -48,14 +48,16 @@ namespace PawnMaster.API.Controllers
 
             //PODEMOS DEVOLVER UN TRUE O EL ID DE LA PARTIDA PARA SABER QUE PARTIDA ESTAMOS JUGANDO
             //ESTE ES EL TRUE
-            if (_paRepo.CrearPartida(partidaDtoPersistence, IdJugadorBlanco, IdJugadorNegro)){
+            if (_paRepo.CrearPartida(partidaDtoPersistence, IdJugadorBlanco, IdJugadorNegro))
+            {
                 _respuestaApi.StatusCode = HttpStatusCode.OK;
                 _respuestaApi.IsSuccess = true;
             }
-            
 
-            var PartidaDto = new PartidaDtoAPI() {
-            
+
+            var PartidaDto = new PartidaDtoAPI()
+            {
+
                 Date = partida.Date,
                 Identificador = partida.Identificador,
                 JugadorBlanco = partida.JugadorBlanco,
@@ -82,7 +84,19 @@ namespace PawnMaster.API.Controllers
 
             //PartidaEnJuego.EjecutarTurno(notacion);
             //PartidaEnJuego.MostrarEstadoPartida();
-            
+
+        }
+
+        [HttpGet("{partidaInt:int}", Name = "GetPartida")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetPartida(int partidaInt)
+        {
+            var partida = _paRepo.RecuperarEstadoPartida(partidaInt);
+            return Ok(partida);
+            //return Ok(partida); NO SE PUEDE PORQUE NO PUEDE TRANFORMAR EL TABLERO EN UN JSON MIRARLO
         }
     }
 }

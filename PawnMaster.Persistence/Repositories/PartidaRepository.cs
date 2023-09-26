@@ -48,7 +48,8 @@ namespace PawnMaster.Persistence.Repositories
                             PosiciónHorizontal = caracter,
                             PosiciónVertical = numero,
                             Partida = PartidaABaseDatos,
-                            CaracterFicha = casilla.FichaActual.Simbolo
+                            CaracterFicha = casilla.FichaActual.Simbolo,
+                            Color = casilla.FichaActual.Color == Color.Negro? Data.Ficha.ColorFicha.Black : Data.Ficha.ColorFicha.White
                             
                         };
                         _bd.Fichas.Add(ficha);
@@ -66,18 +67,83 @@ namespace PawnMaster.Persistence.Repositories
             throw new NotImplementedException();
         }
 
-        public PartidaDto RecuperarEstadoPartida(int id)
+        public PartidaRecuperadaDto RecuperarEstadoPartida(int id)
         {
+            
+
             var PartidaRecuperada = _bd.Partidas.FirstOrDefault( p => p.Id  == id );
 
             if ( PartidaRecuperada == null ) { throw new NotImplementedException(); }
 
-            var PartidaDto = new PartidaDto()
+            var PartidaDto = new PartidaRecuperadaDto()
             {
-                //Date = PartidaRecuperada.TiempoDeJuego,
+                Date = PartidaRecuperada.FechaCreaciónPartida,
+                Identificador = PartidaRecuperada.Id,
+                TurnoPartida = (PartidaRecuperadaDto.Turno)PartidaRecuperada.TurnoPartida,
+                JugadorBlanco = PartidaRecuperada.JugadorBlanco,
+                JugadorNegro = PartidaRecuperada.JugadorNegro
+            };
+            
+            //Recogemos a los jugadores de la BD
+
+            var UsuarioBlanco = _bd.Usuarios.FirstOrDefault(u => u.Id == PartidaRecuperada.JugadorBlancoId);
+            var UsuarioNegro = _bd.Usuarios.FirstOrDefault(u => u.Id == PartidaRecuperada.JugadorNegroId);
+
+            var JugadorBlancoModelo = new Jugador()
+            {
+                Nombre = UsuarioBlanco.Nombre
 
             };
-            throw new NotImplementedException();
+
+            var JugadorNegroModelo = new Jugador()
+            {
+                Nombre = UsuarioNegro.Nombre
+
+            };
+
+
+            //Partida Modelo
+            var PartidaModelo = new Model.Partida(JugadorBlancoModelo, JugadorNegroModelo);
+            var TableroModelo = PartidaModelo.RetornarTablero();
+            
+
+           
+            
+                
+            //Borrar las fichas del tablero
+            for (char caracter = 'A'; caracter <= 'H'; caracter++)
+            {
+                for (int numero = 1; numero < 9; numero++)
+                {
+                    Coordenada origen = new Coordenada(caracter, numero);
+                    if (TableroModelo.TableroJuego.TryGetValue(origen, out var casillaOrigen))
+                        {
+                        if (casillaOrigen.Tengoficha())
+                        {
+                            casillaOrigen.EliminarFicha();
+                        }
+                    }
+                }
+            }
+
+            //Recogemos las coordenadas
+            var Listafichas = _bd.Fichas.Where(f => f.partidaId == PartidaRecuperada.Id).ToList();
+
+            foreach (var f in Listafichas)
+            {
+                var Coordenada = new Coordenada((char)f.PosiciónHorizontal, (int)f.PosiciónVertical);
+
+                //CÓMO DIFERENCIO LAS FICHAS???---------------------------------------------------------------------------
+
+                //Prueba de tablero
+                TableroModelo.AñadirFichaAlTablero(Coordenada, new Peon(Color.Blanco));
+            }
+
+            TableroModelo.MostrarEstadoDelTablero();
+
+            //PartidaDto.Tablero = TableroModelo;
+            return PartidaDto;
+            //throw new NotImplementedException();
         }
     }
 }

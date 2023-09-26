@@ -12,6 +12,6 @@ namespace PawnMaster.Persistence.Repositories.InterfaceRepository
     {
         public bool GuardarEstadoPartida(PartidaDto partida);
         public bool CrearPartida(PartidaDto Partida, int IdBlanco, int IdNegro);
-        public PartidaDto RecuperarEstadoPartida(int id);
+        public PartidaRecuperadaDto RecuperarEstadoPartida(int id);
     }
 }
