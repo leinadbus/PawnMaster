@@ -25,7 +25,7 @@ namespace PawnMaster.Persistence.Repositories
                 JugadorBlancoId = IdBlanco,
                 JugadorNegroId = IdNegro,
                 PartidaEnJuego = true,
-                TiempoDeJuego = DateTime.Now - Partida.Date,
+                FechaCreaciónPartida = DateTime.Now,
                 TurnoPartida = Data.Partida.Turno.white
             };
 
@@ -68,6 +68,15 @@ namespace PawnMaster.Persistence.Repositories
 
         public PartidaDto RecuperarEstadoPartida(int id)
         {
+            var PartidaRecuperada = _bd.Partidas.FirstOrDefault( p => p.Id  == id );
+
+            if ( PartidaRecuperada == null ) { throw new NotImplementedException(); }
+
+            var PartidaDto = new PartidaDto()
+            {
+                //Date = PartidaRecuperada.TiempoDeJuego,
+
+            };
             throw new NotImplementedException();
         }
     }
