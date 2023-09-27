@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PawnMaster.Model
 {
-    internal class Alfil : Ficha
+    public class Alfil : Ficha
     {
         public Alfil(Color color) : base(color)
         {

@@ -173,6 +173,24 @@ namespace PawnMaster.Model
             }
         }
 
+        public void EliminarTodasFichasTablero ()
+        {
+            for (char caracter = 'A'; caracter <= 'H'; caracter++)
+            {
+                for (int numero = 1; numero < 9; numero++)
+                {
+                    Coordenada origen = new Coordenada(caracter, numero);
+                    if (TableroJuego.TryGetValue(origen, out var casillaOrigen))
+                    {
+                        if (casillaOrigen.Tengoficha())
+                        {
+                            casillaOrigen.EliminarFicha();
+                        }
+                    }
+                }
+            }
+        }
+
         public bool SaberSiHayFichasEnElCaminoParaTorre(Casilla casillaEnLaQueEstoy, Casilla casillaALaQuePretendoMoverme)
         {
             bool sePodriaMover = true;

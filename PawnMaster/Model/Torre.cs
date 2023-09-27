@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PawnMaster.Model
 {
-    internal class Torre : Ficha
+    public class Torre : Ficha
     {
         public Torre(Color color) : base(color)
         {
