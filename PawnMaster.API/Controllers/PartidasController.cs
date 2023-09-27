@@ -79,11 +79,82 @@ namespace PawnMaster.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public void HacerMovimiento(string notacion)
+        public void HacerMovimiento(string notacion, int partidaInt)
         {
+            if (!Movimiento.ComprobarNotacionMovimientoEsValida(notacion))
+            {
+                // Si no es válido
+                Console.WriteLine("Notación de movimiento incorrecta.");
+                return;
+            }
 
-            //PartidaEnJuego.EjecutarTurno(notacion);
-            //PartidaEnJuego.MostrarEstadoPartida();
+            //Recogemos el movimiento
+            var movimiento = new Movimiento(notacion); 
+            //Recuperamos la partida 
+            var partida = _paRepo.RecuperarEstadoPartida(partidaInt);
+            //Seleccionamos las casillas que vamos a usar
+            var casillaOrigen = partida.Tablero.SeleccionarCasilla(movimiento.CoordenadaInicial.PosicionHorizontal, movimiento.CoordenadaInicial.PosicionVertical);
+            var casillaDestino = partida.Tablero.SeleccionarCasilla(movimiento.CoordenadaFinal.PosicionHorizontal, movimiento.CoordenadaFinal.PosicionVertical);
+
+            if (!casillaOrigen.Tengoficha())
+            {
+                Console.WriteLine("Casilla seleccionada no contiene ninguna ficha");
+                return;
+            }
+            //Si la ficha no coincide con la del movimiento
+            if (char.ToUpper(movimiento.FichaAMover) != char.ToUpper(casillaOrigen.FichaActual.Simbolo))
+            {
+                Console.WriteLine("Ficha indicada no coincide con la que existe en la casilla");
+                return;
+            }
+            // Si es mover, no puede haber ficha en destino
+            if (!movimiento.EsCaptura && casillaDestino.Tengoficha())
+            {
+                Console.WriteLine("Casilla seleccionada ya contiene una ficha");
+                return;
+            }
+            //Si es mover o capturar como Torre, Alfil, reina, no puede haber fichas en camino
+            //Si es Torre
+            if (movimiento.FichaAMover == 'R')
+            {
+                if (!partida.Tablero.SaberSiHayFichasEnElCaminoParaTorre(casillaOrigen, casillaDestino))
+                {
+                    Console.WriteLine("Existe una ficha en la dirección indicada");
+                    return;
+                }
+            }
+            //Si es Reina
+
+            //Si es Alfil
+
+            // Si es capturar, tiene ficha y es de diferente color, se captura
+            if (movimiento.EsCaptura && casillaDestino.Tengoficha() && casillaOrigen.SonLasFichasDelMismoColor(casillaDestino))
+            {
+                Console.WriteLine("No existe ficha enemiga en la casilla de destino");
+                return;
+            }
+
+            bool movimientoValido;
+            if (movimiento.EsCaptura)
+            {
+                movimientoValido = casillaOrigen.FichaActual.validarCaptura(casillaOrigen, casillaDestino);
+            }
+            else
+            {
+                movimientoValido = casillaOrigen.FichaActual.ValidarMovimiento(casillaOrigen, casillaDestino);
+            }
+
+            if (!movimientoValido)
+            {
+                Console.WriteLine("El movimiento no se puede ejecutar");
+                return;
+            }
+
+            casillaOrigen.FichaActual.AumentarNumeroMovimientos();
+            partida.Tablero.MoverFicha(casillaOrigen.Coordenadas, casillaDestino.Coordenadas);
+
+            partida.Tablero.MostrarEstadoDelTablero();
+            _paRepo.GuardarEstadoPartida(casillaOrigen, casillaDestino, partidaInt);
 
         }
 

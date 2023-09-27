@@ -31,9 +31,7 @@ namespace PawnMaster.Persistence.Repositories
             };
 
             _bd.Partidas.Add(PartidaABaseDatos);
-            
-            //Bucle que vaya por todas las casillas, si función TengoFicha NO es Null, metemos esa ficha a la bbdd con el id de la partida.
-
+ 
             //Aquí la comprobación del tablero
             for (char caracter = 'A'; caracter <= 'H'; caracter++)
             {
@@ -62,10 +60,14 @@ namespace PawnMaster.Persistence.Repositories
             return true;
         }
 
-        public bool GuardarEstadoPartida(PartidaDto partida)
+        public void GuardarEstadoPartida(Casilla Origen, Casilla Destino, int partidaId)
         {
-            //partida.
-            throw new NotImplementedException();
+            var PartidaRecuperada = _bd.Partidas.FirstOrDefault(p => p.Id == partidaId);
+            var FichaAMover = _bd.Fichas.First(f => f.PosiciónVertical == Origen.Coordenadas.PosicionVertical && f.PosiciónHorizontal == Origen.Coordenadas.PosicionHorizontal && f.partidaId == partidaId);
+            FichaAMover.PosiciónHorizontal = Destino.Coordenadas.PosicionHorizontal;
+            FichaAMover.PosiciónVertical = Destino.Coordenadas.PosicionVertical;
+            _bd.SaveChanges(); 
+
         }
         
         public PartidaRecuperadaDto RecuperarEstadoPartida(int id)
