@@ -12,11 +12,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConexionSQL"));
 });
 
-//builder.Services.AddIdentity<Usuario, IdentityRole>().AddUserStore<ApplicationDbContext>();
-    //.AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddScoped<InterfazUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<InterfazPartidaRepository, PartidaRepository>();
-//builder.Services.AddSingleton<InterfazPartidaRepository, PartidaRepository>();
+
 // Add services to the container.
 
 builder.Services.AddControllers();

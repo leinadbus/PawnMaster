@@ -1,4 +1,5 @@
-﻿using PawnMaster.Model;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using PawnMaster.Model;
 using PawnMaster.Persistence.Data;
 using PawnMaster.Persistence.Dtos;
 using PawnMaster.Persistence.Repositories.InterfaceRepository;
@@ -66,11 +67,9 @@ namespace PawnMaster.Persistence.Repositories
             //partida.
             throw new NotImplementedException();
         }
-
+        
         public PartidaRecuperadaDto RecuperarEstadoPartida(int id)
         {
-            
-
             var PartidaRecuperada = _bd.Partidas.FirstOrDefault( p => p.Id  == id );
 
             if ( PartidaRecuperada == null ) { throw new NotImplementedException(); }
@@ -84,66 +83,79 @@ namespace PawnMaster.Persistence.Repositories
                 JugadorNegro = PartidaRecuperada.JugadorNegro
             };
             
-            //Recogemos a los jugadores de la BD
-
-            var UsuarioBlanco = _bd.Usuarios.FirstOrDefault(u => u.Id == PartidaRecuperada.JugadorBlancoId);
-            var UsuarioNegro = _bd.Usuarios.FirstOrDefault(u => u.Id == PartidaRecuperada.JugadorNegroId);
-
-            var JugadorBlancoModelo = new Jugador()
-            {
-                Nombre = UsuarioBlanco.Nombre
-
-            };
-
-            var JugadorNegroModelo = new Jugador()
-            {
-                Nombre = UsuarioNegro.Nombre
-
-            };
-
-
-            //Partida Modelo
-            var PartidaModelo = new Model.Partida(JugadorBlancoModelo, JugadorNegroModelo);
-            var TableroModelo = PartidaModelo.RetornarTablero();
-            
-
-           
-            
-                
-            //Borrar las fichas del tablero
-            for (char caracter = 'A'; caracter <= 'H'; caracter++)
-            {
-                for (int numero = 1; numero < 9; numero++)
-                {
-                    Coordenada origen = new Coordenada(caracter, numero);
-                    if (TableroModelo.TableroJuego.TryGetValue(origen, out var casillaOrigen))
-                        {
-                        if (casillaOrigen.Tengoficha())
-                        {
-                            casillaOrigen.EliminarFicha();
-                        }
-                    }
-                }
-            }
-
-            //Recogemos las coordenadas
+            //Recogemos las Fichas de la BD
             var Listafichas = _bd.Fichas.Where(f => f.partidaId == PartidaRecuperada.Id).ToList();
+            //Colocamos las Fichas
+            var TableroBase = ColocarFichasEnTablero(Listafichas);
+            //Asignamos el tablero al ObjetoDto
+            PartidaDto.Tablero = TableroBase;
+            return PartidaDto;
+        }
 
+        public Tablero ColocarFichasEnTablero(List<Data.Ficha> Listafichas)
+        {
+            var TableroBase = new Tablero();
             foreach (var f in Listafichas)
             {
                 var Coordenada = new Coordenada((char)f.PosiciónHorizontal, (int)f.PosiciónVertical);
 
-                //CÓMO DIFERENCIO LAS FICHAS???---------------------------------------------------------------------------
-
-                //Prueba de tablero
-                TableroModelo.AñadirFichaAlTablero(Coordenada, new Peon(Color.Blanco));
+                if (f.Color == Data.Ficha.ColorFicha.White)
+                {
+                    if (f.CaracterFicha == 'p')
+                    {
+                        TableroBase.AñadirFichaAlTablero(Coordenada, new Peon(Color.Blanco));
+                    }
+                    else if (f.CaracterFicha == 'R')
+                    {
+                        TableroBase.AñadirFichaAlTablero(Coordenada, new Torre(Color.Blanco));
+                    }
+                    else if (f.CaracterFicha == 'N')
+                    {
+                        TableroBase.AñadirFichaAlTablero(Coordenada, new Caballo(Color.Blanco));
+                    }
+                    else if (f.CaracterFicha == 'B')
+                    {
+                        TableroBase.AñadirFichaAlTablero(Coordenada, new Alfil(Color.Blanco));
+                    }
+                    else if (f.CaracterFicha == 'Q')
+                    {
+                        TableroBase.AñadirFichaAlTablero(Coordenada, new Reina(Color.Blanco));
+                    }
+                    else if (f.CaracterFicha == 'K')
+                    {
+                        TableroBase.AñadirFichaAlTablero(Coordenada, new Rey(Color.Blanco));
+                    }
+                }
+                else
+                {
+                    if (f.CaracterFicha == 'p')
+                    {
+                        TableroBase.AñadirFichaAlTablero(Coordenada, new Peon(Color.Negro));
+                    }
+                    else if (f.CaracterFicha == 'R')
+                    {
+                        TableroBase.AñadirFichaAlTablero(Coordenada, new Torre(Color.Negro));
+                    }
+                    else if (f.CaracterFicha == 'N')
+                    {
+                        TableroBase.AñadirFichaAlTablero(Coordenada, new Caballo(Color.Negro));
+                    }
+                    else if (f.CaracterFicha == 'B')
+                    {
+                        TableroBase.AñadirFichaAlTablero(Coordenada, new Alfil(Color.Negro));
+                    }
+                    else if (f.CaracterFicha == 'Q')
+                    {
+                        TableroBase.AñadirFichaAlTablero(Coordenada, new Reina(Color.Negro));
+                    }
+                    else if (f.CaracterFicha == 'K')
+                    {
+                        TableroBase.AñadirFichaAlTablero(Coordenada, new Rey(Color.Negro));
+                    }
+                }
             }
-
-            TableroModelo.MostrarEstadoDelTablero();
-
-            //PartidaDto.Tablero = TableroModelo;
-            return PartidaDto;
-            //throw new NotImplementedException();
+            return TableroBase;
         }
+
     }
 }

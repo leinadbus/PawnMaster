@@ -95,7 +95,8 @@ namespace PawnMaster.API.Controllers
         public IActionResult GetPartida(int partidaInt)
         {
             var partida = _paRepo.RecuperarEstadoPartida(partidaInt);
-            return Ok(partida);
+            partida.Tablero.MostrarEstadoDelTablero();
+            return Ok();
             //return Ok(partida); NO SE PUEDE PORQUE NO PUEDE TRANFORMAR EL TABLERO EN UN JSON MIRARLO
         }
     }
