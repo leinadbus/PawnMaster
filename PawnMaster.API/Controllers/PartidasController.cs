@@ -94,13 +94,16 @@ namespace PawnMaster.API.Controllers
 
             //Recogemos de quién es el turno
             var TurnoJugador = PartidaRecuperadaDto.Turno.white;
+            var ColorJugador = Color.Blanco;
             if (partida.JugadorBlancoId == jugadorId)
             {
                  TurnoJugador = PartidaRecuperadaDto.Turno.white;
+                ColorJugador = Color.Blanco;
             }
             else
             {
                 TurnoJugador = PartidaRecuperadaDto.Turno.black;
+                ColorJugador = Color.Negro;
             }
 
             //Si no le toca mover a este jugador
@@ -129,6 +132,14 @@ namespace PawnMaster.API.Controllers
                 Console.WriteLine("Casilla seleccionada no contiene ninguna ficha");
                 return;
             }
+
+            //Si el color de la ficha no coincide con el color del jugador
+            if(ColorJugador != casillaOrigen.FichaActual.Color)
+            {
+                Console.WriteLine("Este jugador no puede mover esta ficha");
+                return;
+            }
+
             //Si la ficha no coincide con la del movimiento
             if (char.ToUpper(movimiento.FichaAMover) != char.ToUpper(casillaOrigen.FichaActual.Simbolo))
             {
