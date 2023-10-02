@@ -10,9 +10,9 @@ namespace PawnMaster.Persistence.Repositories.InterfaceRepository
 {
     public interface InterfazPartidaRepository
     {
-        public void GuardarEstadoPartida(Casilla Origen, Casilla Destino, int partidaId);
+        public void GuardarEstadoPartidaDespuesDeUnMovimiento(Casilla Origen, Casilla Destino, int partidaId);
         public bool CrearPartida(PartidaDto Partida, int IdBlanco, int IdNegro);
         public PartidaRecuperadaDto RecuperarEstadoPartida(int id);
-        public void CambiarTurnoJugador(int id);
+
     }
 }

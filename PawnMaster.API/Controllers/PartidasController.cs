@@ -193,8 +193,8 @@ namespace PawnMaster.API.Controllers
             partida.Tablero.MoverFicha(casillaOrigen.Coordenadas, casillaDestino.Coordenadas);
 
             partida.Tablero.MostrarEstadoDelTablero();
-            _paRepo.CambiarTurnoJugador(partidaInt);
-            _paRepo.GuardarEstadoPartida(casillaOrigen, casillaDestino, partidaInt);
+
+            _paRepo.GuardarEstadoPartidaDespuesDeUnMovimiento(casillaOrigen, casillaDestino, partidaInt);
 
         }
 

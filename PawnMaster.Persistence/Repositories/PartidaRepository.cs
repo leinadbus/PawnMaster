@@ -60,12 +60,22 @@ namespace PawnMaster.Persistence.Repositories
             return true;
         }
 
-        public void GuardarEstadoPartida(Casilla Origen, Casilla Destino, int partidaId)
+        public void GuardarEstadoPartidaDespuesDeUnMovimiento(Casilla Origen, Casilla Destino, int partidaId)
         {
             var PartidaRecuperada = _bd.Partidas.FirstOrDefault(p => p.Id == partidaId);
             var FichaAMover = _bd.Fichas.First(f => f.PosiciónVertical == Origen.Coordenadas.PosicionVertical && f.PosiciónHorizontal == Origen.Coordenadas.PosicionHorizontal && f.partidaId == partidaId);
             FichaAMover.PosiciónHorizontal = Destino.Coordenadas.PosicionHorizontal;
             FichaAMover.PosiciónVertical = Destino.Coordenadas.PosicionVertical;
+            FichaAMover.NumeroMovimientos++;
+            if (PartidaRecuperada.TurnoPartida == Data.Partida.Turno.white)
+            {
+                PartidaRecuperada.TurnoPartida++;
+
+            }
+            else
+            {
+                PartidaRecuperada.TurnoPartida--;
+            }
             _bd.SaveChanges(); 
 
         }
@@ -159,20 +169,6 @@ namespace PawnMaster.Persistence.Repositories
             return TableroBase;
         }
 
-        public void CambiarTurnoJugador(int id)
-        {
-            var PartidaRecuperada = _bd.Partidas.FirstOrDefault(p => p.Id == id);
-            if(PartidaRecuperada.TurnoPartida == Data.Partida.Turno.white)
-            {
-                PartidaRecuperada.TurnoPartida++;
-                
-            }
-            else
-            {
-                PartidaRecuperada.TurnoPartida--;
-            }
-            _bd.SaveChanges();
-        }
 
     }
 }
