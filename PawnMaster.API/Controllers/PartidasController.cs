@@ -189,7 +189,6 @@ namespace PawnMaster.API.Controllers
                 return;
             }
 
-            casillaOrigen.FichaActual.AumentarNumeroMovimientos();
             partida.Tablero.MoverFicha(casillaOrigen.Coordenadas, casillaDestino.Coordenadas);
 
             partida.Tablero.MostrarEstadoDelTablero();

@@ -67,6 +67,11 @@ namespace PawnMaster.Persistence.Repositories
             FichaAMover.PosiciónHorizontal = Destino.Coordenadas.PosicionHorizontal;
             FichaAMover.PosiciónVertical = Destino.Coordenadas.PosicionVertical;
             FichaAMover.NumeroMovimientos++;
+            if (Destino.Tengoficha())
+            {
+                var FichaAEliminar = _bd.Fichas.First(f => f.PosiciónVertical == Destino.Coordenadas.PosicionVertical && f.PosiciónHorizontal == Destino.Coordenadas.PosicionHorizontal && f.partidaId == partidaId);
+                FichaAEliminar.EnJuego= false;
+            }
             if (PartidaRecuperada.TurnoPartida == Data.Partida.Turno.white)
             {
                 PartidaRecuperada.TurnoPartida++;
