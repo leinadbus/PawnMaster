@@ -81,10 +81,10 @@ namespace PawnMaster.Persistence.Repositories
                 Date = PartidaRecuperada.FechaCreaciónPartida,
                 Identificador = PartidaRecuperada.Id,
                 TurnoPartida = (PartidaRecuperadaDto.Turno)PartidaRecuperada.TurnoPartida,
-                JugadorBlanco = PartidaRecuperada.JugadorBlanco,
-                JugadorNegro = PartidaRecuperada.JugadorNegro
+                JugadorBlancoId = PartidaRecuperada.JugadorBlancoId,
+                JugadorNegroId = PartidaRecuperada.JugadorNegroId
             };
-            
+           
             //Recogemos las Fichas de la BD
             var Listafichas = _bd.Fichas.Where(f => f.partidaId == PartidaRecuperada.Id).ToList();
             //Colocamos las Fichas
@@ -157,6 +157,21 @@ namespace PawnMaster.Persistence.Repositories
                 }
             }
             return TableroBase;
+        }
+
+        public void CambiarTurnoJugador(int id)
+        {
+            var PartidaRecuperada = _bd.Partidas.FirstOrDefault(p => p.Id == id);
+            if(PartidaRecuperada.TurnoPartida == Data.Partida.Turno.white)
+            {
+                PartidaRecuperada.TurnoPartida++;
+                
+            }
+            else
+            {
+                PartidaRecuperada.TurnoPartida--;
+            }
+            _bd.SaveChanges();
         }
 
     }

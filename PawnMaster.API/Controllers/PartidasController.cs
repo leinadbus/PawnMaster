@@ -79,8 +79,37 @@ namespace PawnMaster.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public void HacerMovimiento(string notacion, int partidaInt)
+        public void HacerMovimiento(string notacion, int partidaInt, int jugadorId)
         {
+            //Recuperamos la partida 
+            var partida = _paRepo.RecuperarEstadoPartida(partidaInt);
+
+            //comprobamos si el jugador está en la partida
+            if(partida.JugadorBlancoId !=  jugadorId && partida.JugadorNegroId != jugadorId)
+            {
+                //Si no es jugadador
+                Console.WriteLine("Jugador no pertenece a esta partida.");
+                return;
+            }
+
+            //Recogemos de quién es el turno
+            var TurnoJugador = PartidaRecuperadaDto.Turno.white;
+            if (partida.JugadorBlancoId == jugadorId)
+            {
+                 TurnoJugador = PartidaRecuperadaDto.Turno.white;
+            }
+            else
+            {
+                TurnoJugador = PartidaRecuperadaDto.Turno.black;
+            }
+
+            //Si no le toca mover a este jugador
+            if(partida.TurnoPartida != TurnoJugador)
+            {
+                Console.WriteLine("No es turno del jugador.");
+                return;
+            }
+
             if (!Movimiento.ComprobarNotacionMovimientoEsValida(notacion))
             {
                 // Si no es válido
@@ -90,8 +119,7 @@ namespace PawnMaster.API.Controllers
 
             //Recogemos el movimiento
             var movimiento = new Movimiento(notacion); 
-            //Recuperamos la partida 
-            var partida = _paRepo.RecuperarEstadoPartida(partidaInt);
+
             //Seleccionamos las casillas que vamos a usar
             var casillaOrigen = partida.Tablero.SeleccionarCasilla(movimiento.CoordenadaInicial.PosicionHorizontal, movimiento.CoordenadaInicial.PosicionVertical);
             var casillaDestino = partida.Tablero.SeleccionarCasilla(movimiento.CoordenadaFinal.PosicionHorizontal, movimiento.CoordenadaFinal.PosicionVertical);
@@ -154,6 +182,7 @@ namespace PawnMaster.API.Controllers
             partida.Tablero.MoverFicha(casillaOrigen.Coordenadas, casillaDestino.Coordenadas);
 
             partida.Tablero.MostrarEstadoDelTablero();
+            _paRepo.CambiarTurnoJugador(partidaInt);
             _paRepo.GuardarEstadoPartida(casillaOrigen, casillaDestino, partidaInt);
 
         }

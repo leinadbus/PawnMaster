@@ -17,8 +17,9 @@ namespace PawnMaster.Persistence.Dtos
         public Tablero Tablero { get; set; }
 
         public Usuario JugadorBlanco { get; set; }
+        public int JugadorBlancoId { get; set; }
         public Usuario JugadorNegro { get; set; }
-
+        public int JugadorNegroId { get; set; }
         public List<string> ListaDeMovimientos { get; set; }
         public enum Turno { white, black }
         public Turno TurnoPartida { get; set; }
