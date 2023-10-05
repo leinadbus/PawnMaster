@@ -28,11 +28,11 @@ namespace PawnMaster.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public PartidaDtoAPI CrearPartida(int IdJugadorBlanco, int IdJugadorNegro)
+        public IActionResult CrearPartida(int IdJugadorBlanco, int IdJugadorNegro)
         {
             //Los jugadores deberían entrar como parámetros de la función
-            Jugador JugadorBlancoe = new Jugador { Nombre = "Daniel" };
-            Jugador JugadorNegroe = new Jugador { Nombre = "Sergio" };
+            Jugador JugadorBlancoe = new Jugador { Nombre = "Ejemplo" };
+            Jugador JugadorNegroe = new Jugador { Nombre = "Ejemplo" };
 
             Partida partida = new(JugadorBlancoe, JugadorNegroe);
             partida.CrearPartidaDeAjedrez();
@@ -45,23 +45,20 @@ namespace PawnMaster.API.Controllers
                 Tablero = partida.RetornarTablero(),
             };
 
-            //PODEMOS DEVOLVER UN TRUE O EL ID DE LA PARTIDA PARA SABER QUE PARTIDA ESTAMOS JUGANDO
-            //ESTE ES EL TRUE
-            //if (_paRepo.CrearPartida(partidaDtoPersistence, IdJugadorBlanco, IdJugadorNegro))
-            //{
-            //    _respuestaApi.StatusCode = HttpStatusCode.OK;
-            //    _respuestaApi.IsSuccess = true;
-            //}
             var id = _paRepo.CrearPartida(partidaDtoPersistence, IdJugadorBlanco, IdJugadorNegro);
+
             var PartidaDto = new PartidaDtoAPI()
             {
                 Date = partida.Date,
                 Id = id,
                 JugadorBlanco = partida.JugadorBlanco,
-                JugadorNegro = partida.JugadorNegro
+                JugadorNegro = partida.JugadorNegro,
+                Tablero = partidaDtoPersistence.Tablero
             };
 
-            return PartidaDto;
+            //return PartidaDto;
+            string json = JsonConvert.SerializeObject(PartidaDto);
+            return Ok(json);
         }
 
         [HttpPost("movimiento")]

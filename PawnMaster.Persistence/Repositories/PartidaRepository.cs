@@ -1,13 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using PawnMaster.Model;
+﻿using PawnMaster.Model;
 using PawnMaster.Persistence.Data;
 using PawnMaster.Persistence.Dtos;
 using PawnMaster.Persistence.Repositories.InterfaceRepository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PawnMaster.Persistence.Repositories
 {
@@ -19,7 +13,7 @@ namespace PawnMaster.Persistence.Repositories
             this._bd = bd;
         }
 
-        public bool CrearPartida(PartidaDto Partida,int IdBlanco, int IdNegro)
+        public int CrearPartida(PartidaDto Partida,int IdBlanco, int IdNegro)
         {
             //Pasarla a objeto de _Bd
             var PartidaABaseDatos = new Data.Partida() {
@@ -57,7 +51,7 @@ namespace PawnMaster.Persistence.Repositories
             }
 
             _bd.SaveChanges();
-            return true;
+            return PartidaABaseDatos.Id;
         }
 
         public void GuardarEstadoPartidaDespuesDeUnMovimiento(Casilla Origen, Casilla Destino, int partidaId)
@@ -102,8 +96,9 @@ namespace PawnMaster.Persistence.Repositories
            
             //Recogemos las Fichas de la BD
             var Listafichas = _bd.Fichas.Where(f => f.partidaId == PartidaRecuperada.Id).ToList();
+            var ListaFichasEnJuego = _bd.Fichas.Where(f => f.partidaId == PartidaRecuperada.Id && f.EnJuego == true).ToList();
             //Colocamos las Fichas
-            var TableroBase = ColocarFichasEnTablero(Listafichas);
+            var TableroBase = ColocarFichasEnTablero(ListaFichasEnJuego);
             //Asignamos el tablero al ObjetoDto
             PartidaDto.Tablero = TableroBase;
             return PartidaDto;
