@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PawnMaster.API.Dtos;
 using PawnMaster.Model;
 using PawnMaster.Persistence.Dtos;
-using PawnMaster.Persistence.Repositories;
 using PawnMaster.Persistence.Repositories.InterfaceRepository;
 using System.Net;
 
@@ -48,28 +47,20 @@ namespace PawnMaster.API.Controllers
 
             //PODEMOS DEVOLVER UN TRUE O EL ID DE LA PARTIDA PARA SABER QUE PARTIDA ESTAMOS JUGANDO
             //ESTE ES EL TRUE
-            if (_paRepo.CrearPartida(partidaDtoPersistence, IdJugadorBlanco, IdJugadorNegro))
-            {
-                _respuestaApi.StatusCode = HttpStatusCode.OK;
-                _respuestaApi.IsSuccess = true;
-            }
-
-
+            //if (_paRepo.CrearPartida(partidaDtoPersistence, IdJugadorBlanco, IdJugadorNegro))
+            //{
+            //    _respuestaApi.StatusCode = HttpStatusCode.OK;
+            //    _respuestaApi.IsSuccess = true;
+            //}
+            var id = _paRepo.CrearPartida(partidaDtoPersistence, IdJugadorBlanco, IdJugadorNegro);
             var PartidaDto = new PartidaDtoAPI()
             {
-
                 Date = partida.Date,
-                Identificador = partida.Identificador,
+                Id = id,
                 JugadorBlanco = partida.JugadorBlanco,
                 JugadorNegro = partida.JugadorNegro
             };
 
-            //this.PartidaEnJuego = partida;
-            //HttpContext.Session.Set<Partida>("PartidaEnJuego", partida);
-            //var repositorioPartida = new PartidaRepository();
-            //repositorioPartida.Partida = PartidaEnJuego;
-
-            //PartidaEnJuego.MostrarEstadoPartida();
             return PartidaDto;
         }
 
@@ -206,7 +197,8 @@ namespace PawnMaster.API.Controllers
         {
             var partida = _paRepo.RecuperarEstadoPartida(partidaInt);
             partida.Tablero.MostrarEstadoDelTablero();
-            return Ok();
+            string json = JsonConvert.SerializeObject(partida);
+            return Ok(json);
             //return Ok(partida); NO SE PUEDE PORQUE NO PUEDE TRANFORMAR EL TABLERO EN UN JSON MIRARLO
         }
     }
