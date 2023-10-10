@@ -36,16 +36,32 @@ namespace PawnMaster.API.Controllers
 
             Partida partida = new(JugadorBlancoe, JugadorNegroe);
             partida.CrearPartidaDeAjedrez();
-            var partidaDtoPersistence = new PartidaDto()
+
+            //Crear una lista de fichas 
+            var Tablero = partida.RetornarTablero();
+
+            List<FichaDto> FichasDto =
+            Tablero.TableroJuego
+                .Where(p => p.Value.FichaActual != null) // Filtra casillas con fichas
+                .Select(f => new FichaDto
+                {
+                    PosicionVertical = f.Key.PosicionVertical,
+                    PosicionHorizontal = f.Key.PosicionHorizontal,
+                    Simbolo = f.Value.FichaActual.Simbolo,
+                    LetraRepresentante = f.Value.FichaActual.Color.LetraRepresentante
+                })
+                .ToList();
+
+            var PartidaABaseDatos = new Persistence.Data.Partida()
             {
-                Date = DateTime.Now,
-                JugadorBlanco = JugadorBlancoe,
-                JugadorNegro = JugadorNegroe,
-                JugadorActual = JugadorBlancoe,
-                Tablero = partida.RetornarTablero(),
+                JugadorBlancoId = IdJugadorBlanco,
+                JugadorNegroId = IdJugadorNegro,
+                PartidaEnJuego = true,
+                FechaCreaciónPartida = DateTime.Now,
+                TurnoPartida = Persistence.Data.Partida.Turno.white
             };
 
-            var id = _paRepo.CrearPartida(partidaDtoPersistence, IdJugadorBlanco, IdJugadorNegro);
+            var id = _paRepo.CrearPartida(PartidaABaseDatos, FichasDto);
 
             var PartidaDto = new PartidaDtoAPI()
             {
@@ -53,12 +69,10 @@ namespace PawnMaster.API.Controllers
                 Id = id,
                 JugadorBlanco = partida.JugadorBlanco,
                 JugadorNegro = partida.JugadorNegro,
-                Tablero = partidaDtoPersistence.Tablero
+                Tablero = Tablero
             };
 
-            //return PartidaDto;
-            string json = JsonConvert.SerializeObject(PartidaDto);
-            return Ok(json);
+            return Ok(PartidaDto);
         }
 
         [HttpPost("movimiento")]

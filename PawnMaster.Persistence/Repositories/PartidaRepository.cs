@@ -13,54 +13,28 @@ namespace PawnMaster.Persistence.Repositories
             this._bd = bd;
         }
 
-        public int CrearPartida(PartidaDto Partida,int IdBlanco, int IdNegro)
+        public int CrearPartida(Data.Partida Partida, List<FichaDto> Listafichas)
         {
-            //Pasarla a objeto de _Bd
-            var PartidaABaseDatos = new Data.Partida() {
-                JugadorBlancoId = IdBlanco,
-                JugadorNegroId = IdNegro,
-                PartidaEnJuego = true,
-                FechaCreaciónPartida = DateTime.Now,
-                TurnoPartida = Data.Partida.Turno.white
-            };
 
-            _bd.Partidas.Add(PartidaABaseDatos);
- 
+            _bd.Partidas.Add(Partida);
 
-
-            foreach(var casilla in Partida.Tablero.TableroJuego)
+            foreach (var f in Listafichas)
             {
-                //------------------------------------------------------
-            }
-
-
-            //Aquí la comprobación del tablero
-            for (char caracter = 'A'; caracter <= 'H'; caracter++)
-            {
-                for (int numero = 1; numero < 9; numero++)
+                var ficha = new Data.Ficha()
                 {
-                    var casilla = Partida.Tablero.SeleccionarCasilla(caracter, numero);
-                    if (casilla.Tengoficha())
-                    {
-                        var ficha = new Data.Ficha()
-                        {
-                            EnJuego = true,
-                            NumeroMovimientos = 0,
-                            PosiciónHorizontal = caracter,
-                            PosiciónVertical = numero,
-                            Partida = PartidaABaseDatos,
-                            CaracterFicha = casilla.FichaActual.Simbolo,
-                            ColorFicha = casilla.FichaActual.Color.LetraRepresentante ,
-                            
-                            
-                        };
-                        _bd.Fichas.Add(ficha);
-                    }
-                }
+                    EnJuego = true,
+                    NumeroMovimientos = 0,
+                    PosiciónHorizontal = f.PosicionHorizontal,
+                    PosiciónVertical = f.PosicionVertical,
+                    Partida = Partida,
+                    CaracterFicha = f.Simbolo,
+                    ColorFicha = f.LetraRepresentante,
+                };
+                _bd.Fichas.Add(ficha);
             }
 
             _bd.SaveChanges();
-            return PartidaABaseDatos.Id;
+            return Partida.Id;
         }
 
         public void GuardarEstadoPartidaDespuesDeUnMovimiento(Casilla Origen, Casilla Destino, int partidaId)
