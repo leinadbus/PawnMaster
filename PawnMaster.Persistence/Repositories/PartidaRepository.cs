@@ -26,6 +26,14 @@ namespace PawnMaster.Persistence.Repositories
 
             _bd.Partidas.Add(PartidaABaseDatos);
  
+
+
+            foreach(var casilla in Partida.Tablero.TableroJuego)
+            {
+                //------------------------------------------------------
+            }
+
+
             //Aquí la comprobación del tablero
             for (char caracter = 'A'; caracter <= 'H'; caracter++)
             {
@@ -42,7 +50,8 @@ namespace PawnMaster.Persistence.Repositories
                             PosiciónVertical = numero,
                             Partida = PartidaABaseDatos,
                             CaracterFicha = casilla.FichaActual.Simbolo,
-                            Color = casilla.FichaActual.Color == Color.Negro? Data.Ficha.ColorFicha.Black : Data.Ficha.ColorFicha.White
+                            ColorFicha = casilla.FichaActual.Color.LetraRepresentante ,
+                            
                             
                         };
                         _bd.Fichas.Add(ficha);
@@ -111,7 +120,7 @@ namespace PawnMaster.Persistence.Repositories
             {
                 var Coordenada = new Coordenada((char)f.PosiciónHorizontal, (int)f.PosiciónVertical);
 
-                if (f.Color == Data.Ficha.ColorFicha.White)
+                if (f.ColorFicha == Color.Blanco.LetraRepresentante)
                 {
                     if (f.CaracterFicha == 'p')
                     {

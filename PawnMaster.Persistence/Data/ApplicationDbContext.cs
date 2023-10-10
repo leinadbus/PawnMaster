@@ -43,6 +43,10 @@ namespace PawnMaster.Persistence.Data
             fichas.HasOne(p => p.Partida)
             .WithMany()
             .HasForeignKey(p => p.partidaId);
+           
+            fichas.Property(p => p.ColorFicha)
+            .HasColumnName("ColorFicha") // Nombre de la columna en la base de datos
+            .HasColumnType("char(1)");   // Tipo de datos en la base de datos
         }
 
         //Aquí agregamos los modelos

@@ -12,8 +12,8 @@ using PawnMaster.Persistence.Data;
 namespace PawnMaster.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230926161736_CambioDatoFechaPartidas")]
-    partial class CambioDatoFechaPartidas
+    [Migration("20231010180101_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,6 +35,11 @@ namespace PawnMaster.Persistence.Migrations
                     b.Property<string>("CaracterFicha")
                         .IsRequired()
                         .HasColumnType("nvarchar(1)");
+
+                    b.Property<string>("ColorFicha")
+                        .IsRequired()
+                        .HasColumnType("char(1)")
+                        .HasColumnName("ColorFicha");
 
                     b.Property<bool>("EnJuego")
                         .HasColumnType("bit");

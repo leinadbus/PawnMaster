@@ -34,8 +34,10 @@ namespace PawnMaster.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(1)");
 
-                    b.Property<int>("Color")
-                        .HasColumnType("int");
+                    b.Property<string>("ColorFicha")
+                        .IsRequired()
+                        .HasColumnType("char(1)")
+                        .HasColumnName("ColorFicha");
 
                     b.Property<bool>("EnJuego")
                         .HasColumnType("bit");

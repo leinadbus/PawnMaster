@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PawnMaster.Persistence.Migrations
 {
-    public partial class MigracionInicial : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -33,7 +33,8 @@ namespace PawnMaster.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TiempoDeJuego = table.Column<TimeSpan>(type: "time", nullable: false),
+                    TurnoPartida = table.Column<int>(type: "int", nullable: false),
+                    FechaCreaciónPartida = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PartidaEnJuego = table.Column<bool>(type: "bit", nullable: false),
                     Ganador = table.Column<int>(type: "int", nullable: true),
                     JugadorBlancoId = table.Column<int>(type: "int", nullable: false),
@@ -63,10 +64,12 @@ namespace PawnMaster.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CaracterFicha = table.Column<string>(type: "nvarchar(1)", nullable: false),
                     partidaId = table.Column<int>(type: "int", nullable: false),
+                    ColorFicha = table.Column<string>(type: "char(1)", nullable: false),
                     NumeroMovimientos = table.Column<int>(type: "int", nullable: false),
-                    PosiciónHorizontal = table.Column<string>(type: "nvarchar(1)", nullable: false),
-                    PosiciónVertical = table.Column<int>(type: "int", nullable: false),
+                    PosiciónHorizontal = table.Column<string>(type: "nvarchar(1)", nullable: true),
+                    PosiciónVertical = table.Column<int>(type: "int", nullable: true),
                     EnJuego = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>

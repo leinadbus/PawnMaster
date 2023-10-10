@@ -8,8 +8,12 @@ namespace PawnMaster.Model
 {
     public class Color
     {
-        private char LetraRepresentante { get; set; }
-        private Color(char letra)
+        public char LetraRepresentante { get; set; }
+        public Color()
+        {
+            LetraRepresentante = 'x';
+        }
+        public Color(char letra)
         {
             LetraRepresentante = letra;
         }
