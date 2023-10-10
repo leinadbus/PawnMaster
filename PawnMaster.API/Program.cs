@@ -18,11 +18,8 @@ builder.Services.AddScoped<InterfazPartidaRepository, PartidaRepository>();
 
 // Add services to the container.
 
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    // Formatea el JSON legible
-    options.JsonSerializerOptions.WriteIndented = true; 
-});
+builder.Services.AddControllers().AddNewtonsoftJson();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
