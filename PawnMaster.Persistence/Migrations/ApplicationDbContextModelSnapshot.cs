@@ -87,8 +87,9 @@ namespace PawnMaster.Persistence.Migrations
                     b.Property<bool>("PartidaEnJuego")
                         .HasColumnType("bit");
 
-                    b.Property<int>("TurnoPartida")
-                        .HasColumnType("int");
+                    b.Property<string>("TurnoPartida")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1)");
 
                     b.HasKey("Id");
 

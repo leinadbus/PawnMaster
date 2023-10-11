@@ -40,23 +40,26 @@ namespace PawnMaster.Persistence.Repositories
         public void GuardarEstadoPartidaDespuesDeUnMovimiento(Casilla Origen, Casilla Destino, int partidaId)
         {
             var PartidaRecuperada = _bd.Partidas.FirstOrDefault(p => p.Id == partidaId);
+
             var FichaAMover = _bd.Fichas.First(f => f.PosiciónVertical == Origen.Coordenadas.PosicionVertical && f.PosiciónHorizontal == Origen.Coordenadas.PosicionHorizontal && f.partidaId == partidaId);
+
             FichaAMover.PosiciónHorizontal = Destino.Coordenadas.PosicionHorizontal;
             FichaAMover.PosiciónVertical = Destino.Coordenadas.PosicionVertical;
             FichaAMover.NumeroMovimientos++;
+
             if (Destino.Tengoficha())
             {
                 var FichaAEliminar = _bd.Fichas.First(f => f.PosiciónVertical == Destino.Coordenadas.PosicionVertical && f.PosiciónHorizontal == Destino.Coordenadas.PosicionHorizontal && f.partidaId == partidaId);
                 FichaAEliminar.EnJuego= false;
             }
-            if (PartidaRecuperada.TurnoPartida == Data.Partida.Turno.white)
+            if (PartidaRecuperada.TurnoPartida == Color.Blanco.LetraRepresentante)
             {
-                PartidaRecuperada.TurnoPartida++;
+                PartidaRecuperada.TurnoPartida = Color.Negro.LetraRepresentante;
 
             }
             else
             {
-                PartidaRecuperada.TurnoPartida--;
+                PartidaRecuperada.TurnoPartida = Color.Blanco.LetraRepresentante;
             }
             _bd.SaveChanges(); 
 
@@ -72,7 +75,7 @@ namespace PawnMaster.Persistence.Repositories
             {
                 Date = PartidaRecuperada.FechaCreaciónPartida,
                 Identificador = PartidaRecuperada.Id,
-                TurnoPartida = (PartidaRecuperadaDto.Turno)PartidaRecuperada.TurnoPartida,
+                TurnoPartida = PartidaRecuperada.TurnoPartida,
                 JugadorBlancoId = PartidaRecuperada.JugadorBlancoId,
                 JugadorNegroId = PartidaRecuperada.JugadorNegroId
             };
