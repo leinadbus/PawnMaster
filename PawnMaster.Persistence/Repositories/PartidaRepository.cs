@@ -13,12 +13,22 @@ namespace PawnMaster.Persistence.Repositories
             this._bd = bd;
         }
 
-        public int CrearPartida(Data.Partida Partida, List<FichaDto> Listafichas)
+        public int CrearPartida(PartidaDataDto PartidaOrigen)
         {
+            //Mapeado del objeto partida
+            var Partida = new Data.Partida()
+            {
+                FechaCreaciónPartida = PartidaOrigen.Date,
+                PartidaEnJuego = PartidaOrigen.EnJuego,
+                JugadorBlancoId = PartidaOrigen.JugadorBlancoId,
+                JugadorNegroId = PartidaOrigen.JugadorNegroId,
+                TurnoPartida = PartidaOrigen.JugadorActual,
+
+            };
 
             _bd.Partidas.Add(Partida);
 
-            foreach (var f in Listafichas)
+            foreach (var f in PartidaOrigen.ListaDeFichas)
             {
                 var ficha = new Data.Ficha()
                 {
