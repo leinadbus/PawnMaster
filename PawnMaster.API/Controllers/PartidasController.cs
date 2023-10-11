@@ -51,28 +51,21 @@ namespace PawnMaster.API.Controllers
                     LetraRepresentante = f.Value.FichaActual.Color.LetraRepresentante
                 })
                 .ToList();
-
-            var PartidaABaseDatos = new Persistence.Data.Partida()
+            var PartidaADataBase = new Persistence.Dtos.PartidaDataDto()
             {
+                Date = DateTime.Now,
+                EnJuego = true,
                 JugadorBlancoId = IdJugadorBlanco,
                 JugadorNegroId = IdJugadorNegro,
-                PartidaEnJuego = true,
-                FechaCreaciónPartida = DateTime.Now,
-                TurnoPartida = Color.Blanco.LetraRepresentante
+                JugadorActual = Color.Blanco.LetraRepresentante,
+                ListaDeFichas = FichasDto
             };
 
-            var id = _paRepo.CrearPartida(PartidaABaseDatos, FichasDto);
+            var id = _paRepo.CrearPartida(PartidaADataBase);
 
-            var PartidaDto = new PartidaDtoAPI()
-            {
-                Date = partida.Date,
-                Id = id,
-                JugadorBlanco = partida.JugadorBlanco,
-                JugadorNegro = partida.JugadorNegro,
-                Tablero = Tablero
-            };
+            PartidaADataBase.Id = id;
 
-            return Ok(PartidaDto);
+            return Ok(PartidaADataBase);
         }
 
         [HttpPost("movimiento")]
