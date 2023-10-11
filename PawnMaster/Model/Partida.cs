@@ -77,9 +77,14 @@ namespace PawnMaster.Model
 
         }
 
-        public Tablero RetornarTablero ()
+        public Tablero RetornarTablero()
         {
             return this.Tablero;
+        }
+
+        public void SustituirTablero (Tablero tablero)
+        {
+            this.Tablero = tablero;
         }
 
         private void AlternarJugador()
@@ -140,7 +145,7 @@ namespace PawnMaster.Model
                 return;
             }
             //Si la ficha no coincide con la del movimiento
-            if(char.ToUpper(movimiento.FichaAMover) != char.ToUpper(casillaOrigen.FichaActual.Simbolo))
+            if (char.ToUpper(movimiento.FichaAMover) != char.ToUpper(casillaOrigen.FichaActual.Simbolo))
             {
                 Console.WriteLine("Ficha indicada no coincide con la que existe en la casilla");
                 return;
@@ -153,9 +158,9 @@ namespace PawnMaster.Model
             }
             //Si es mover o capturar como Torre, Alfil, reina, no puede haber fichas en camino
             //Si es Torre
-            if(movimiento.FichaAMover == 'R')
+            if (movimiento.FichaAMover == 'R')
             {
-                if(!Tablero.SaberSiHayFichasEnElCaminoParaTorre(casillaOrigen, casillaDestino))
+                if (!Tablero.SaberSiHayFichasEnElCaminoParaTorre(casillaOrigen, casillaDestino))
                 {
                     Console.WriteLine("Existe una ficha en la dirección indicada");
                     return;
@@ -182,7 +187,7 @@ namespace PawnMaster.Model
                 movimientoValido = casillaOrigen.FichaActual.ValidarMovimiento(casillaOrigen, casillaDestino);
             }
 
-            if(!movimientoValido)
+            if (!movimientoValido)
             {
                 Console.WriteLine("El movimiento no se puede ejecutar");
                 return;
@@ -193,5 +198,72 @@ namespace PawnMaster.Model
             RegistrarMovimiento(notacion);
             AlternarJugador();
         }
+
+        public bool ComprobacionesDeMovimiento (Movimiento movimiento)
+        {
+
+            //Seleccionamos las casillas que vamos a usar
+            var casillaOrigen = Tablero.SeleccionarCasilla(movimiento.CoordenadaInicial.PosicionHorizontal, movimiento.CoordenadaInicial.PosicionVertical);
+            var casillaDestino =Tablero.SeleccionarCasilla(movimiento.CoordenadaFinal.PosicionHorizontal, movimiento.CoordenadaFinal.PosicionVertical);
+
+            if (!casillaOrigen.Tengoficha())
+            {
+                Console.WriteLine("Casilla seleccionada no contiene ninguna ficha");
+                return false;
+            }
+
+            //Si la ficha no coincide con la del movimiento
+            if (char.ToUpper(movimiento.FichaAMover) != char.ToUpper(casillaOrigen.FichaActual.Simbolo))
+            {
+                Console.WriteLine("Ficha indicada no coincide con la que existe en la casilla");
+                return false;
+            }
+            // Si es mover, no puede haber ficha en destino
+            if (!movimiento.EsCaptura && casillaDestino.Tengoficha())
+            {
+                Console.WriteLine("Casilla seleccionada ya contiene una ficha");
+                return false;
+            }
+            //Si es mover o capturar como Torre, Alfil, reina, no puede haber fichas en camino
+            //Si es Torre
+            if (movimiento.FichaAMover == 'R')
+            {
+                if (!Tablero.SaberSiHayFichasEnElCaminoParaTorre(casillaOrigen, casillaDestino))
+                {
+                    Console.WriteLine("Existe una ficha en la dirección indicada");
+                    return false;
+                }
+            }
+            //Si es Reina
+
+            //Si es Alfil
+
+            // Si es capturar, tiene ficha y es de diferente color, se captura
+            if (movimiento.EsCaptura && casillaDestino.Tengoficha() && casillaOrigen.SonLasFichasDelMismoColor(casillaDestino))
+            {
+                Console.WriteLine("No existe ficha enemiga en la casilla de destino");
+                return false;
+            }
+
+            bool movimientoValido;
+            if (movimiento.EsCaptura)
+            {
+                movimientoValido = casillaOrigen.FichaActual.validarCaptura(casillaOrigen, casillaDestino);
+            }
+            else
+            {
+                movimientoValido = casillaOrigen.FichaActual.ValidarMovimiento(casillaOrigen, casillaDestino);
+            }
+
+            if (!movimientoValido)
+            {
+                Console.WriteLine("El movimiento no se puede ejecutar");
+                return false;
+            }
+
+            return true;
+        }
+
     }
+
 }
