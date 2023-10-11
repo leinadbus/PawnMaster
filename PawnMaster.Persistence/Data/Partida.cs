@@ -15,7 +15,7 @@ namespace PawnMaster.Persistence.Data
     {
 
         public int Id { get; set; }
-        public Turno TurnoPartida { get; set; }
+        public char TurnoPartida { get; set; }
         public DateTime FechaCreaciónPartida { get; set; }
         public bool PartidaEnJuego { get; set; }
         public int? Ganador { get; set; }
@@ -29,6 +29,6 @@ namespace PawnMaster.Persistence.Data
         
         
 
-        public enum Turno {white,black}
+        //public enum Turno {white,black}
     }
 }
