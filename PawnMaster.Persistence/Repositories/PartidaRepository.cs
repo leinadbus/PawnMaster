@@ -59,7 +59,7 @@ namespace PawnMaster.Persistence.Repositories
 
             if (Destino.Tengoficha())
             {
-                var FichaAEliminar = _bd.Fichas.First(f => f.PosiciónVertical == Destino.Coordenadas.PosicionVertical && f.PosiciónHorizontal == Destino.Coordenadas.PosicionHorizontal && f.partidaId == partidaId);
+                var FichaAEliminar = _bd.Fichas.First(f => f.PosiciónVertical == Destino.Coordenadas.PosicionVertical && f.PosiciónHorizontal == Destino.Coordenadas.PosicionHorizontal && f.partidaId == partidaId && f.EnJuego == true);
                 FichaAEliminar.EnJuego= false;
             }
             if (PartidaRecuperada.TurnoPartida == Color.Blanco.LetraRepresentante)
