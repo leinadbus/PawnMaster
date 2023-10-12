@@ -23,6 +23,7 @@ namespace PawnMaster.Persistence.Dtos
         public List<string> ListaDeMovimientos { get; set; }
         //public enum Turno { white, black }
         //public Turno TurnoPartida { get; set; }
+        public List<Data.Ficha> ListaFichasFueraJuego { get; set; }
 
         public char TurnoPartida { get; set; }
 
