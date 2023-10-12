@@ -89,9 +89,10 @@ namespace PawnMaster.Persistence.Repositories
                 JugadorBlancoId = PartidaRecuperada.JugadorBlancoId,
                 JugadorNegroId = PartidaRecuperada.JugadorNegroId
             };
-           
+
             //Recogemos las Fichas de la BD
-            var Listafichas = _bd.Fichas.Where(f => f.partidaId == PartidaRecuperada.Id).ToList();
+            PartidaDto.ListaFichasFueraJuego = _bd.Fichas.Where(f => f.partidaId == PartidaRecuperada.Id && f.EnJuego == false).ToList();
+
             var ListaFichasEnJuego = _bd.Fichas.Where(f => f.partidaId == PartidaRecuperada.Id && f.EnJuego == true).ToList();
             //Colocamos las Fichas
             var TableroBase = ColocarFichasEnTablero(ListaFichasEnJuego);
