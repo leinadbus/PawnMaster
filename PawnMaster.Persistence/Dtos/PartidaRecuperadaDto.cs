@@ -24,7 +24,7 @@ namespace PawnMaster.Persistence.Dtos
         //public enum Turno { white, black }
         //public Turno TurnoPartida { get; set; }
         public List<Data.Ficha> ListaFichasFueraJuego { get; set; }
-
+        public List<Data.Ficha> ListaFichasEnJuego { get; set; }
         public char TurnoPartida { get; set; }
 
     }
