@@ -33,7 +33,7 @@ namespace PawnMaster.Persistence.Repositories
 
         public Usuario GetJugador(int jugadorId)
         {
-            return _bd.Usuarios.FirstOrDefault(u => u.Id == jugadorId);
+            return _bd.Usuarios.FirstOrDefault(u => u.Id == jugadorId); ;
         }
 
         public ICollection<Usuario> GetJugadores()

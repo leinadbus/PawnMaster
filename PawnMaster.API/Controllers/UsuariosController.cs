@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NHibernate.Mapping.ByCode.Impl;
 using PawnMaster.API.Dtos;
+using PawnMaster.Model;
 using PawnMaster.Persistence.Dtos;
 using PawnMaster.Persistence.Repositories;
 using PawnMaster.Persistence.Repositories.InterfaceRepository;
@@ -22,11 +23,10 @@ namespace PawnMaster.API.Controllers
             this._respuestaApi = new();
         }
 
-        [HttpGet]
+        [HttpGet("usuarios")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-
         public IActionResult GetUsuarios()
         {
             var listaUsuarios = _usRepo.GetJugadores();
@@ -44,7 +44,26 @@ namespace PawnMaster.API.Controllers
             return Ok(listaUsuariosDto);
         }
 
-            [AllowAnonymous]
+        [HttpGet("usuario/{id}")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public IActionResult GetUsuario(int id)
+        {
+            var Usuario = _usRepo.GetJugador(id);
+            
+            var UsuarioDto = new JugadoresDtoApi
+                {
+                    Id = Usuario.Id,
+                    Nombre = Usuario.Nombre,
+                    Correo = Usuario.Correo,
+                    FechaCreacion = Usuario.CreacionCuenta
+            };
+            
+            return Ok(UsuarioDto);
+        }
+
+        [AllowAnonymous]
         [HttpPost("registro")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

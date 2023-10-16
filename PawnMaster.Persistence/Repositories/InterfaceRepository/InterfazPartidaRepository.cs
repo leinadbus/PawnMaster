@@ -9,5 +9,6 @@ namespace PawnMaster.Persistence.Repositories.InterfaceRepository
         public int CrearPartida(PartidaDataDto Partida);
         public PartidaRecuperadaDto RecuperarEstadoPartida(int id);
         //public List<Data.Ficha> RecuperarEstadoPartida(int id);
+        public ICollection<Data.Partida> GetPartidasJugadas(int jugadorId);
     }
 }
