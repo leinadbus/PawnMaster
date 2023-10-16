@@ -74,7 +74,7 @@ namespace PawnMaster.Persistence.Repositories
             _bd.SaveChanges(); 
 
         }
-        
+
         public PartidaRecuperadaDto RecuperarEstadoPartida(int id)
         {
             var PartidaRecuperada = _bd.Partidas.FirstOrDefault( p => p.Id  == id );
@@ -87,19 +87,18 @@ namespace PawnMaster.Persistence.Repositories
                 Identificador = PartidaRecuperada.Id,
                 TurnoPartida = PartidaRecuperada.TurnoPartida,
                 JugadorBlancoId = PartidaRecuperada.JugadorBlancoId,
-                JugadorNegroId = PartidaRecuperada.JugadorNegroId
-            };
+                JugadorNegroId = PartidaRecuperada.JugadorNegroId,
+                ListaFichasFueraJuego = _bd.Fichas.Where(f => f.partidaId == PartidaRecuperada.Id && f.EnJuego == false).ToList(),
+                ListaFichasEnJuego = _bd.Fichas.Where(f => f.partidaId == PartidaRecuperada.Id && f.EnJuego == true).ToList()
+        };
 
-            //Recogemos las Fichas de la BD
-            PartidaDto.ListaFichasFueraJuego = _bd.Fichas.Where(f => f.partidaId == PartidaRecuperada.Id && f.EnJuego == false).ToList();
-
-            var ListaFichasEnJuego = _bd.Fichas.Where(f => f.partidaId == PartidaRecuperada.Id && f.EnJuego == true).ToList();
-            //Colocamos las Fichas
-            var TableroBase = ColocarFichasEnTablero(ListaFichasEnJuego);
-            //Asignamos el tablero al ObjetoDto
-            PartidaDto.Tablero = TableroBase;
+            //PARA REPRESENTACIÓN GRÁFICA EN CONSOLA ---------------------------------------------------------------------------------------------->
+            //Colocamos las Fichas Asignamos el tablero al ObjetoDto
+            PartidaDto.Tablero = ColocarFichasEnTablero(PartidaDto.ListaFichasEnJuego);
+            //REPRESENTACIÓN GRÁFICA EN CONSOLA ---------------------------------------------------------------------------------------------->
             return PartidaDto;
         }
+
 
         public Tablero ColocarFichasEnTablero(List<Data.Ficha> Listafichas)
         {
