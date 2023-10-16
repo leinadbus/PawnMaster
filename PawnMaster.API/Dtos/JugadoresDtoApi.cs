@@ -1,4 +1,6 @@
-﻿namespace PawnMaster.API.Dtos
+﻿using PawnMaster.Persistence.Data;
+
+namespace PawnMaster.API.Dtos
 {
     public class JugadoresDtoApi
     {
