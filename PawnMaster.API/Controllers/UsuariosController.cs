@@ -22,8 +22,29 @@ namespace PawnMaster.API.Controllers
             this._respuestaApi = new();
         }
 
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
 
-        [AllowAnonymous]
+        public IActionResult GetUsuarios()
+        {
+            var listaUsuarios = _usRepo.GetJugadores();
+            var listaUsuariosDto = new List<JugadoresDtoApi>();
+            foreach (var item in listaUsuarios)
+            {
+                listaUsuariosDto.Add(new JugadoresDtoApi
+                {
+                    Id = item.Id,
+                    Nombre = item.Nombre,
+                    Correo = item.Correo,
+                    FechaCreacion = item.CreacionCuenta
+                });
+            }
+            return Ok(listaUsuariosDto);
+        }
+
+            [AllowAnonymous]
         [HttpPost("registro")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -37,11 +58,11 @@ namespace PawnMaster.API.Controllers
                 _respuestaApi.IsSuccess = false;
                 _respuestaApi.ErrorMessages.Add("El nombre de usuario ya existe");
                 return _respuestaApi;
-                 ;
+                ;
             }
 
             //Mapeo a Objeto de Persistence
-            var usuarioRegistroDto = new UsuarioRegistroDto() 
+            var usuarioRegistroDto = new UsuarioRegistroDto()
             {
                 CorreoElectronico = usuarioRegistro.Email,
                 Nombre = usuarioRegistro.Name,
@@ -50,7 +71,7 @@ namespace PawnMaster.API.Controllers
             };
 
 
-            var usuario =  _usRepo.Registro(usuarioRegistroDto);
+            var usuario = _usRepo.Registro(usuarioRegistroDto);
 
             if (!usuario)
             {
@@ -64,5 +85,6 @@ namespace PawnMaster.API.Controllers
             _respuestaApi.IsSuccess = true;
             return _respuestaApi;
         }
+
     }
 }
