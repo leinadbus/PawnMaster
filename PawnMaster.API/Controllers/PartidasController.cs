@@ -157,19 +157,13 @@ namespace PawnMaster.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //public IActionResult GetPartida(int partidaInt)
-        //{
-        //    var partida = _paRepo.RecuperarEstadoPartida(partidaInt);
-        //    partida.Tablero.MostrarEstadoDelTablero();
-        //    return Ok(partida);
-        //}
 
 
-        //Prueba imprimiendo la lista de fichas fuera de juego
         public IActionResult GetPartida(int partidaInt)
         {
             var partida = _paRepo.RecuperarEstadoPartida(partidaInt);
 
+            //PARA REPRESENTACIÓN GRÁFICA EN CONSOLA ---------------------------------------------------------------------------------------------->
             Console.WriteLine();
             Console.WriteLine("Cementerio de fichas");
             foreach (var f in partida.ListaFichasFueraJuego)
@@ -177,18 +171,54 @@ namespace PawnMaster.API.Controllers
                 Console.ForegroundColor = f.ColorFicha == Color.Blanco.LetraRepresentante ? ConsoleColor.Cyan : ConsoleColor.Magenta;
                 Console.Write(f.CaracterFicha);
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.Write(" | ");
+                Console.Write(" , ");
 
             }
+            Console.WriteLine();
             partida.Tablero.MostrarEstadoDelTablero();
-            return Ok(partida);
+
+            //REPRESENTACIÓN GRÁFICA EN CONSOLA ---------------------------------------------------------------------------------------------->
+
+            List<FichasDtoApi> ListaFichasDtoEnJuego = new();
+            List<FichasDtoApi> ListaFichasDtoFueraDeJuego = new();
+
+            foreach (var p in partida.ListaFichasEnJuego)
+            {
+                ListaFichasDtoEnJuego.Add(new FichasDtoApi
+                {
+                    EnJuego = true,
+                    LetracolorRepresentante = p.ColorFicha,
+                    PosicionHorizontal = (char)p.PosiciónHorizontal,
+                    PosicionVertical = (char)p.PosiciónVertical,
+                    Simbolo = p.CaracterFicha
+
+                });
+            }
+
+            foreach (var p in partida.ListaFichasFueraJuego)
+            {
+                ListaFichasDtoFueraDeJuego.Add(new FichasDtoApi
+                {
+                    EnJuego = false,
+                    LetracolorRepresentante = p.ColorFicha,
+                    PosicionHorizontal = (char)p.PosiciónHorizontal,
+                    PosicionVertical = (char)p.PosiciónVertical,
+                    Simbolo = p.CaracterFicha
+
+                });
+            }
+
+            var respuesta = new
+            {
+                Turno = partida.TurnoPartida,
+                Tiempo = partida.Date,
+                ListaFichasEnJuego = ListaFichasDtoEnJuego,
+                ListaFichasFueraDeJuego = ListaFichasDtoFueraDeJuego
+
+            };
+            return Ok(respuesta);
+
         }
 
-        //Prueba devoviendo solo las listas, no queremos un tablero pa na
-
-        //public IActionResult GetPartida(int partidaInt)
-        //{
-        //La idea es que  _paRepo.RecuperarEstadoPartida(partidaInt) no devuelva una partida sino una List de Data.Ficha ó de fichaDto
-        //}
     }
 }
