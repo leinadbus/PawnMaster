@@ -21,7 +21,34 @@ namespace PawnMaster.API.Controllers
             _respuestaApi = new();
         }
 
-        [HttpPost("partidaNueva")]
+        [HttpGet("usuario/{IdJugador}")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+
+        public IActionResult GetPartidasJugando(int IdJugador)
+        {
+            var ListaPartidas = _paRepo.GetPartidasJugadas(IdJugador);
+            var PartidasDtos = new List<PartidasRecuperadasDtoAPI>();
+            foreach (var item in ListaPartidas)
+            {
+                PartidasDtos.Add(new PartidasRecuperadasDtoAPI()
+                {
+                    Id = item.Id,
+                    Date = item.FechaCreaciónPartida,
+                    JugadorActual = item.TurnoPartida,
+                    JugadorBlanco = item.JugadorBlancoId,
+                    JugadorNegro = item.JugadorNegroId.
+                    EnJuego = item.PartidaEnJuego
+
+                });
+            }
+            return Ok(PartidasDtos);
+        }
+
+
+            [HttpPost("partidaNueva")]
         [ProducesResponseType(201, Type = typeof(PartidaDtoAPI))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -157,7 +184,6 @@ namespace PawnMaster.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-
 
         public IActionResult GetPartida(int partidaInt)
         {

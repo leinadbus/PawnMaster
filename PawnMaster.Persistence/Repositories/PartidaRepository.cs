@@ -2,6 +2,7 @@
 using PawnMaster.Persistence.Data;
 using PawnMaster.Persistence.Dtos;
 using PawnMaster.Persistence.Repositories.InterfaceRepository;
+using Partida = PawnMaster.Persistence.Data.Partida;
 
 namespace PawnMaster.Persistence.Repositories
 {
@@ -11,6 +12,11 @@ namespace PawnMaster.Persistence.Repositories
         public PartidaRepository(ApplicationDbContext bd)
         {
             this._bd = bd;
+        }
+
+        public ICollection<Partida> GetPartidasJugadas(int jugadorId)
+        {
+            return _bd.Partidas.Where(u => u.JugadorBlancoId == jugadorId || u.JugadorNegroId == jugadorId).ToList(); ;
         }
 
         public int CrearPartida(PartidaDataDto PartidaOrigen)
@@ -164,7 +170,6 @@ namespace PawnMaster.Persistence.Repositories
             }
             return TableroBase;
         }
-
 
     }
 }

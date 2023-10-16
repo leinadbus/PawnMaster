@@ -9,5 +9,6 @@ namespace PawnMaster.API.Dtos
         public int JugadorBlanco { get; set; }
         public int JugadorNegro { get; set; }
         public char JugadorActual { get; set; }
+        public bool EnJuego { get; set; }
     }
 }
