@@ -8,6 +8,6 @@ namespace PawnMaster.Persistence.Repositories.InterfaceRepository
         public void GuardarEstadoPartidaDespuesDeUnMovimiento(Casilla Origen, Casilla Destino, int partidaId);
         public int CrearPartida(PartidaDataDto Partida);
         public PartidaRecuperadaDto RecuperarEstadoPartida(int id);
-
+        //public List<Data.Ficha> RecuperarEstadoPartida(int id);
     }
 }
