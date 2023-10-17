@@ -51,7 +51,12 @@ namespace PawnMaster.API.Controllers
         public IActionResult GetUsuario(int id)
         {
             var Usuario = _usRepo.GetJugador(id);
-            
+
+            if (Usuario == null)
+            {
+                return NotFound();
+            }
+
             var UsuarioDto = new JugadoresDtoApi
                 {
                     Id = Usuario.Id,
@@ -70,6 +75,7 @@ namespace PawnMaster.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public RespuestaApi Registro([FromBody] UsuarioRegistroAPIDto usuarioRegistro)
         {
+
             bool validarCorreoUsuarioUnico = _usRepo.EsCorreoUnico(usuarioRegistro.Email);
             if (!validarCorreoUsuarioUnico)
             {
