@@ -39,7 +39,7 @@ namespace PawnMaster.API.Controllers
                     Date = item.FechaCreaciónPartida,
                     JugadorActual = item.TurnoPartida,
                     JugadorBlanco = item.JugadorBlancoId,
-                    JugadorNegro = item.JugadorNegroId.
+                    JugadorNegro = item.JugadorNegroId,
                     EnJuego = item.PartidaEnJuego
 
                 });
@@ -234,7 +234,7 @@ namespace PawnMaster.API.Controllers
                 });
             }
 
-            var respuesta = new
+            var respuesta = new InformacionActualPartidaDto () 
             {
                 Turno = partida.TurnoPartida,
                 Tiempo = partida.Date,
