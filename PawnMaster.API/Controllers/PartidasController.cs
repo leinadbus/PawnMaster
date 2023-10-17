@@ -14,11 +14,75 @@ namespace PawnMaster.API.Controllers
     {
         private readonly InterfazPartidaRepository _paRepo;
         protected RespuestaApi _respuestaApi;
-        //private Partida PartidaEnJuego;
+
         public PartidasController(InterfazPartidaRepository paRepo)
         {
             _paRepo = paRepo;
             _respuestaApi = new();
+        }
+
+        [HttpGet("{partidaInt:int}", Name = "GetPartida")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+
+        public IActionResult GetPartida(int partidaInt)
+        {
+            var partida = _paRepo.RecuperarEstadoPartida(partidaInt);
+
+            if (partida.Identificador == -partidaInt) { return NotFound(); }
+
+            //PARA REPRESENTACIÓN GRÁFICA EN CONSOLA ---------------------------------------------------------------------------------------------->
+            Console.WriteLine();
+            Console.WriteLine("Cementerio de fichas");
+            foreach (var f in partida.ListaFichasFueraJuego)
+            {
+                Console.ForegroundColor = f.ColorFicha == Color.Blanco.LetraRepresentante ? ConsoleColor.Cyan : ConsoleColor.Magenta;
+                Console.Write(f.CaracterFicha);
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write(" , ");
+
+            }
+            Console.WriteLine();
+            partida.Tablero.MostrarEstadoDelTablero();
+            //REPRESENTACIÓN GRÁFICA EN CONSOLA ---------------------------------------------------------------------------------------------->
+
+            List<FichasDtoApi> ListaFichasDtoEnJuego = new();
+            List<FichasDtoApi> ListaFichasDtoFueraDeJuego = new();
+
+            foreach (var p in partida.ListaFichasEnJuego)
+            {
+                ListaFichasDtoEnJuego.Add(new FichasDtoApi
+                {
+                    EnJuego = true,
+                    LetracolorRepresentante = p.ColorFicha,
+                    PosicionHorizontal = (char)p.PosiciónHorizontal,
+                    PosicionVertical = (char)p.PosiciónVertical,
+                    Simbolo = p.CaracterFicha
+                });
+            }
+
+            foreach (var p in partida.ListaFichasFueraJuego)
+            {
+                ListaFichasDtoFueraDeJuego.Add(new FichasDtoApi
+                {
+                    EnJuego = false,
+                    LetracolorRepresentante = p.ColorFicha,
+                    PosicionHorizontal = (char)p.PosiciónHorizontal,
+                    PosicionVertical = (char)p.PosiciónVertical,
+                    Simbolo = p.CaracterFicha
+                });
+            }
+
+            var respuesta = new InformacionActualPartidaDto()
+            {
+                Turno = partida.TurnoPartida,
+                Tiempo = partida.Date,
+                ListaFichasEnJuego = ListaFichasDtoEnJuego,
+                ListaFichasFueraDeJuego = ListaFichasDtoFueraDeJuego
+            };
+            return Ok(respuesta);
         }
 
         [HttpGet("usuario/{IdJugador}")]
@@ -30,6 +94,11 @@ namespace PawnMaster.API.Controllers
         public IActionResult GetPartidasJugando(int IdJugador)
         {
             var ListaPartidas = _paRepo.GetPartidasJugadas(IdJugador);
+            if (ListaPartidas == null)
+            {
+                return NotFound();
+            }
+
             var PartidasDtos = new List<PartidasRecuperadasDtoAPI>();
             foreach (var item in ListaPartidas)
             {
@@ -47,8 +116,7 @@ namespace PawnMaster.API.Controllers
             return Ok(PartidasDtos);
         }
 
-
-            [HttpPost("partidaNueva")]
+        [HttpPost("partidaNueva")]
         [ProducesResponseType(201, Type = typeof(PartidaDtoAPI))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -117,7 +185,7 @@ namespace PawnMaster.API.Controllers
 
             //Recogemos de quién es el turno
             var TurnoJugador = Color.Blanco;
-            
+
             //Es el jugador que manda el movimiento el jugador blanco???
             if (partida.JugadorBlancoId == jugadorId)
             {
@@ -178,73 +246,5 @@ namespace PawnMaster.API.Controllers
             //--------------------------------------------------------------------------------- ---------------------------------------------
 
         }
-
-        [HttpGet("{partidaInt:int}", Name = "GetPartida")]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-
-        public IActionResult GetPartida(int partidaInt)
-        {
-            var partida = _paRepo.RecuperarEstadoPartida(partidaInt);
-
-            //PARA REPRESENTACIÓN GRÁFICA EN CONSOLA ---------------------------------------------------------------------------------------------->
-            Console.WriteLine();
-            Console.WriteLine("Cementerio de fichas");
-            foreach (var f in partida.ListaFichasFueraJuego)
-            {
-                Console.ForegroundColor = f.ColorFicha == Color.Blanco.LetraRepresentante ? ConsoleColor.Cyan : ConsoleColor.Magenta;
-                Console.Write(f.CaracterFicha);
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write(" , ");
-
-            }
-            Console.WriteLine();
-            partida.Tablero.MostrarEstadoDelTablero();
-
-            //REPRESENTACIÓN GRÁFICA EN CONSOLA ---------------------------------------------------------------------------------------------->
-
-            List<FichasDtoApi> ListaFichasDtoEnJuego = new();
-            List<FichasDtoApi> ListaFichasDtoFueraDeJuego = new();
-
-            foreach (var p in partida.ListaFichasEnJuego)
-            {
-                ListaFichasDtoEnJuego.Add(new FichasDtoApi
-                {
-                    EnJuego = true,
-                    LetracolorRepresentante = p.ColorFicha,
-                    PosicionHorizontal = (char)p.PosiciónHorizontal,
-                    PosicionVertical = (char)p.PosiciónVertical,
-                    Simbolo = p.CaracterFicha
-
-                });
-            }
-
-            foreach (var p in partida.ListaFichasFueraJuego)
-            {
-                ListaFichasDtoFueraDeJuego.Add(new FichasDtoApi
-                {
-                    EnJuego = false,
-                    LetracolorRepresentante = p.ColorFicha,
-                    PosicionHorizontal = (char)p.PosiciónHorizontal,
-                    PosicionVertical = (char)p.PosiciónVertical,
-                    Simbolo = p.CaracterFicha
-
-                });
-            }
-
-            var respuesta = new InformacionActualPartidaDto () 
-            {
-                Turno = partida.TurnoPartida,
-                Tiempo = partida.Date,
-                ListaFichasEnJuego = ListaFichasDtoEnJuego,
-                ListaFichasFueraDeJuego = ListaFichasDtoFueraDeJuego
-
-            };
-            return Ok(respuesta);
-
-        }
-
     }
 }

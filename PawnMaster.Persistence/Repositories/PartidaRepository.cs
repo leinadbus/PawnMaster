@@ -1,4 +1,5 @@
-﻿using PawnMaster.Model;
+﻿using FluentNHibernate.Conventions.Inspections;
+using PawnMaster.Model;
 using PawnMaster.Persistence.Data;
 using PawnMaster.Persistence.Dtos;
 using PawnMaster.Persistence.Repositories.InterfaceRepository;
@@ -85,7 +86,13 @@ namespace PawnMaster.Persistence.Repositories
         {
             var PartidaRecuperada = _bd.Partidas.FirstOrDefault( p => p.Id  == id );
 
-            if ( PartidaRecuperada == null ) { throw new NotImplementedException(); }
+            if ( PartidaRecuperada == null ) 
+            { 
+                return new PartidaRecuperadaDto()
+                {
+                    Identificador = -id, 
+                }; 
+            }
 
             var PartidaDto = new PartidaRecuperadaDto()
             {
