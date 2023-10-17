@@ -12,3 +12,4 @@ namespace PawnMaster.API.Dtos
         public bool EnJuego { get; set; }
     }
 }
+ 

@@ -57,7 +57,7 @@ namespace PawnMaster.Persistence.Repositories
         {
             var PartidaRecuperada = _bd.Partidas.FirstOrDefault(p => p.Id == partidaId);
 
-            var FichaAMover = _bd.Fichas.First(f => f.PosiciónVertical == Origen.Coordenadas.PosicionVertical && f.PosiciónHorizontal == Origen.Coordenadas.PosicionHorizontal && f.partidaId == partidaId);
+            var FichaAMover = _bd.Fichas.First(f => f.PosiciónVertical == Origen.Coordenadas.PosicionVertical && f.PosiciónHorizontal == Origen.Coordenadas.PosicionHorizontal && f.partidaId == partidaId && f.EnJuego == true);
 
             FichaAMover.PosiciónHorizontal = Destino.Coordenadas.PosicionHorizontal;
             FichaAMover.PosiciónVertical = Destino.Coordenadas.PosicionVertical;
@@ -105,7 +105,7 @@ namespace PawnMaster.Persistence.Repositories
             return PartidaDto;
         }
 
-
+        //PARA REPRESENTACIÓN GRÁFICA EN CONSOLA ---------------------------------------------------------------------------------------------->
         public Tablero ColocarFichasEnTablero(List<Data.Ficha> Listafichas)
         {
             var TableroBase = new Tablero();
@@ -170,6 +170,6 @@ namespace PawnMaster.Persistence.Repositories
             }
             return TableroBase;
         }
-
+        //REPRESENTACIÓN GRÁFICA EN CONSOLA ---------------------------------------------------------------------------------------------->
     }
 }
