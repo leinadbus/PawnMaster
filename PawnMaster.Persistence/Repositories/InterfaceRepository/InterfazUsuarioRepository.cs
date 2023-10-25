@@ -1,10 +1,5 @@
 ﻿using PawnMaster.Persistence.Data;
 using PawnMaster.Persistence.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PawnMaster.Persistence.Repositories.InterfaceRepository
 {
@@ -14,5 +9,6 @@ namespace PawnMaster.Persistence.Repositories.InterfaceRepository
         Usuario GetJugador(int id);
         bool EsCorreoUnico(string correo);
         bool Registro(UsuarioRegistroDto registro);
+        UsuarioLoginRespuestaDto Login(UsuarioLoginDto usuarioLoginDto);
     }
 }
