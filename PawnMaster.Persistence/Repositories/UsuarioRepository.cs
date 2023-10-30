@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PawnMaster.Persistence.Data;
 using PawnMaster.Persistence.Dtos;
@@ -7,17 +9,17 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
+
 namespace PawnMaster.Persistence.Repositories
 {
     public class UsuarioRepository : InterfazUsuarioRepository
     {
         private readonly ApplicationDbContext _bd;
         private string claveSecreta;
-        //private readonly UserManager<Usuario> _userManager;
         public UsuarioRepository(ApplicationDbContext _bd, IConfiguration config)
         {
             this._bd = _bd;
-            claveSecreta = config["JwtSettings:Key"];   //---------------------------------------------------POSIBLE FALLO
+            claveSecreta = config["JwtSettings:Key"];   
         }
 
         public bool EsCorreoUnico(string correo)
@@ -42,11 +44,14 @@ namespace PawnMaster.Persistence.Repositories
 
         public bool Registro(UsuarioRegistroDto usuarioRegistroDto)
         {
+            var passwordHasher = new PasswordHasher<string>();
+            var hashedPassword = passwordHasher.HashPassword(null, usuarioRegistroDto.Password);
+
             var jugador = new Usuario() 
             {
                 Correo = usuarioRegistroDto.CorreoElectronico,
                 Nombre = usuarioRegistroDto.Nombre,
-                Password = usuarioRegistroDto.Password,
+                Password = hashedPassword,
                 Role = "Usuario",
             };
 
@@ -67,10 +72,6 @@ namespace PawnMaster.Persistence.Repositories
                
                 );
 
-            //bool isValida = await _userManager.CheckPasswordAsync(usuario, usuarioLoginDto.Password);
-
-            //Validamos si el usuario no existe con la combinación de usuario y contraseña correcta
-            //if (usuario == null || isValida == false)
             if (usuario == null )
             {
                 var usuarioRespuesta = new UsuarioLoginRespuestaDto()
@@ -80,6 +81,41 @@ namespace PawnMaster.Persistence.Repositories
                 };
                 return usuarioRespuesta;
             }
+
+            //-------------
+            var passwordHasher = new PasswordHasher<string>();
+
+            // Recupera el hash de la contraseña almacenado en la base de datos para el usuario.
+            var storedHashedPassword = usuario.Password;
+
+            // La contraseña proporcionada por el usuario al iniciar sesión.
+            var providedPassword = usuarioLoginDto.Password;
+
+            // Comprueba si la contraseña proporcionada coincide con el hash almacenado.
+            var result = passwordHasher.VerifyHashedPassword(null, storedHashedPassword, providedPassword);
+
+            if (result != Microsoft.AspNetCore.Identity.PasswordVerificationResult.Success)
+            {
+                var usuarioRespuesta = new UsuarioLoginRespuestaDto()
+                {
+                    Token = ""
+
+                };
+                return usuarioRespuesta;
+            }
+           
+            //-------------
+
+
+            //if (usuario.Password != usuarioLoginDto.Password)
+            //{
+            //    var usuarioRespuesta = new UsuarioLoginRespuestaDto()
+            //    {
+            //        Token = ""
+
+            //    };
+            //    return usuarioRespuesta;
+            //}
 
             //Aqui existe el usuario
             var roles = usuario.Role;
@@ -99,14 +135,14 @@ namespace PawnMaster.Persistence.Repositories
             };
 
             var token = manejadorToken.CreateToken(tokenDescriptor);
-            var usuarioLoginRespuestaDtp = new UsuarioLoginRespuestaDto()
+            var usuarioLoginRespuestaDto = new UsuarioLoginRespuestaDto()
             {
                 Token = manejadorToken.WriteToken(token),
                 Id = usuario.Id,
                 Nombre = usuario.Nombre,
                 UserName = usuario.Correo
             };
-            return usuarioLoginRespuestaDtp;
+            return usuarioLoginRespuestaDto;
         }
 
     }
