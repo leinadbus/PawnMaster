@@ -88,6 +88,7 @@ namespace PawnMaster.API.Controllers
             return Ok(respuesta);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Usuario")]
         [HttpGet("usuario/{IdJugador}")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -120,6 +121,7 @@ namespace PawnMaster.API.Controllers
             return Ok(PartidasDtos);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Usuario")]
         [HttpPost("partidaNueva")]
         [ProducesResponseType(201, Type = typeof(PartidaDtoAPI))]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -167,6 +169,7 @@ namespace PawnMaster.API.Controllers
             return Ok(PartidaADataBase);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Usuario")]
         [HttpPost("movimiento")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

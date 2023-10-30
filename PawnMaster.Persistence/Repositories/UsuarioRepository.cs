@@ -65,8 +65,6 @@ namespace PawnMaster.Persistence.Repositories
         public UsuarioLoginRespuestaDto Login(UsuarioLoginDto usuarioLoginDto)
 
         {
-            //var passwordEncriptado = obtenermd5(usuarioLoginDto.Password);
-
             var usuario = _bd.Usuarios.FirstOrDefault(
                 u => u.Correo.ToLower() == usuarioLoginDto.CorreoElectronico.ToLower()
                
@@ -82,17 +80,10 @@ namespace PawnMaster.Persistence.Repositories
                 return usuarioRespuesta;
             }
 
-            //-------------
             var passwordHasher = new PasswordHasher<string>();
 
-            // Recupera el hash de la contraseña almacenado en la base de datos para el usuario.
-            var storedHashedPassword = usuario.Password;
-
-            // La contraseña proporcionada por el usuario al iniciar sesión.
-            var providedPassword = usuarioLoginDto.Password;
-
             // Comprueba si la contraseña proporcionada coincide con el hash almacenado.
-            var result = passwordHasher.VerifyHashedPassword(null, storedHashedPassword, providedPassword);
+            var result = passwordHasher.VerifyHashedPassword(null, usuario.Password, usuarioLoginDto.Password);
 
             if (result != Microsoft.AspNetCore.Identity.PasswordVerificationResult.Success)
             {
@@ -103,19 +94,6 @@ namespace PawnMaster.Persistence.Repositories
                 };
                 return usuarioRespuesta;
             }
-           
-            //-------------
-
-
-            //if (usuario.Password != usuarioLoginDto.Password)
-            //{
-            //    var usuarioRespuesta = new UsuarioLoginRespuestaDto()
-            //    {
-            //        Token = ""
-
-            //    };
-            //    return usuarioRespuesta;
-            //}
 
             //Aqui existe el usuario
             var roles = usuario.Role;
