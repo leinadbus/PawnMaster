@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PawnMaster.API.Dtos;
 using PawnMaster.Model;
@@ -21,6 +23,7 @@ namespace PawnMaster.API.Controllers
             _respuestaApi = new();
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Usuario")]
         [HttpGet("{partidaInt:int}", Name = "GetPartida")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -94,7 +97,8 @@ namespace PawnMaster.API.Controllers
         public IActionResult GetPartidasJugando(int IdJugador)
         {
             var ListaPartidas = _paRepo.GetPartidasJugadas(IdJugador);
-            if (ListaPartidas == null)
+            //-------------------------------------------------------------------(MENSAJE PERSONALIZADO NO TIENE PARTIDA JUGADAS EN VEZ DE UN ERROR
+            if (ListaPartidas.Count() == 0)
             {
                 return NotFound();
             }
